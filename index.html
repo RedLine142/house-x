@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#171a20">
+  <meta name="description" content="Хаус-Х — подбор и продажа недвижимости. Квартиры, дома и участки. Помогаем найти пространство для вашей следующей главы.">
+  <title>Хаус-Х — недвижимость с характером</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <div class="topline"><div class="container topline-inner"><span>Недвижимость. Люди. Возможности.</span><span class="topline-right">Работаем, чтобы вы нашли своё</span></div></div>
+  <header class="header">
+    <div class="container header-inner">
+      <a class="brand" href="#" aria-label="Хаус-Х — главная"><span class="brand-mark">Х</span><span class="brand-name">ХАУС<span>-Х</span><small>АГЕНТСТВО НЕДВИЖИМОСТИ</small></span></a>
+      <button class="menu-toggle" id="menuToggle" aria-label="Открыть меню" aria-expanded="false"><i></i><i></i></button>
+      <nav class="nav" id="mainNav"><a href="#catalog">Каталог</a><a href="#services">Услуги</a><a href="#about">О компании</a><a href="#contacts">Контакты</a></nav>
+      <a class="header-phone" href="tel:+73842000000"><span>Обсудим вашу задачу</span><b>+7 (3842) 00-00-00</b></a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-photo"></div><div class="hero-shade"></div>
+      <div class="container hero-content">
+        <div class="eyebrow light"><span></span> ХАУС-Х · НЕДВИЖИМОСТЬ</div>
+        <h1>Пространство<br>для <em>новой</em> главы.</h1>
+        <p>Находим не просто квадратные метры.<br>Помогаем найти место, которое станет вашим.</p>
+        <div class="hero-actions"><a class="btn btn-accent" href="#catalog">Выбрать недвижимость <span>↗</span></a><a class="text-link light-link" href="#about">Узнать о нас <span>→</span></a></div>
+        <div class="hero-note"><span class="hero-line"></span><span>ПОДБОР · СОПРОВОЖДЕНИЕ · РЕЗУЛЬТАТ</span></div>
+      </div>
+      <div class="hero-index"><b>01</b><span>/</span>03</div>
+    </section>
+
+    <section class="search-strip">
+      <div class="container search-inner">
+        <div class="search-heading"><span class="eyebrow">НАЙДИТЕ СВОЁ</span><b>Начнём с главного</b></div>
+        <form class="quick-search" id="quickSearch">
+          <label>Тип недвижимости<select id="quickType"><option value="all">Любой тип</option><option value="Квартира">Квартира</option><option value="Дом">Дом</option><option value="Участок">Участок</option></select></label>
+          <label>Бюджет<select id="quickPrice"><option value="all">Любой бюджет</option><option value="5000000">До 5 млн ₽</option><option value="10000000">До 10 млн ₽</option><option value="20000000">До 20 млн ₽</option></select></label>
+          <button class="btn btn-dark" type="submit">Подобрать <span>↗</span></button>
+        </form>
+      </div>
+    </section>
+
+    <section class="section catalog-section" id="catalog">
+      <div class="container">
+        <div class="section-head">
+          <div><div class="eyebrow"><span></span> ВЫБРАННЫЕ ОБЪЕКТЫ</div><h2>Недвижимость<br><em>с потенциалом.</em></h2></div>
+          <p>Подобрали интересные варианты.<br>Каждый — со своей историей и возможностями.</p>
+        </div>
+        <div class="catalog-toolbar"><div class="filter-tabs" id="filterTabs"><button class="active" data-filter="all">Все объекты <sup>04</sup></button><button data-filter="Квартира">Квартиры</button><button data-filter="Дом">Дома</button><button data-filter="Участок">Участки</button></div><div class="sort-wrap"><label for="sortSelect">Сортировка</label><select id="sortSelect"><option value="default">По умолчанию</option><option value="cheap">Сначала дешевле</option><option value="expensive">Сначала дороже</option></select></div></div>
+        <div class="property-grid" id="propertyGrid"></div>
+        <div class="catalog-bottom"><span>ПОКАЗАНЫ ИЗБРАННЫЕ ПРЕДЛОЖЕНИЯ</span><a class="text-link" href="#contacts">Не нашли подходящее? <b>Подберём для вас →</b></a></div>
+      </div>
+    </section>
+
+    <section class="manifesto" id="about">
+      <div class="manifesto-image"><img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=85" alt="Современный интерьер дома" loading="lazy"><div class="image-label">ХАУС-Х <span>ВАШ СЛЕДУЮЩИЙ ШАГ</span></div></div>
+      <div class="manifesto-copy"><div class="eyebrow"><span></span> БОЛЬШЕ, ЧЕМ СДЕЛКА</div><h2>Дом — это<br>не адрес.<br><em>Это ощущение.</em></h2><p>Мы верим, что хорошая недвижимость начинается с понимания человека. Поэтому сначала слушаем, задаём правильные вопросы и только потом предлагаем варианты.</p><p>ХАУС-Х — команда, которая соединяет людей и пространства. Честно, внимательно и с фокусом на результат.</p><a class="btn btn-outline" href="#contacts">Познакомиться ближе <span>↗</span></a></div>
+    </section>
+
+    <section class="section services-section" id="services"><div class="container">
+      <div class="section-head"><div><div class="eyebrow"><span></span> ЧЕМ МЫ ПОЛЕЗНЫ</div><h2>От первого вопроса<br><em>до ключей.</em></h2></div><p>Берём на себя сложное,<br>чтобы вам осталось главное — выбрать.</p></div>
+      <div class="services-grid">
+        <article class="service-card"><span class="service-number">01</span><div class="service-icon">⌂</div><h3>Покупка недвижимости</h3><p>Подбор объектов под ваши цели, бюджет и образ жизни. Проверяем детали и сопровождаем переговоры.</p><a href="#contacts">Обсудить покупку <span>↗</span></a></article>
+        <article class="service-card"><span class="service-number">02</span><div class="service-icon">◇</div><h3>Продажа объекта</h3><p>Помогаем определить стратегию, подготовить объект к показам и найти заинтересованного покупателя.</p><a href="#contacts">Обсудить продажу <span>↗</span></a></article>
+        <article class="service-card"><span class="service-number">03</span><div class="service-icon">↗</div><h3>Сопровождение сделки</h3><p>Координируем этапы сделки, помогаем с документами и держим процесс под контролем.</p><a href="#contacts">Получить консультацию <span>↗</span></a></article>
+      </div>
+    </div></section>
+
+    <section class="cta-band"><div class="container cta-inner"><div><div class="eyebrow light">ЕСТЬ ЗАДАЧА?</div><h2>Давайте найдём<br><em>решение.</em></h2></div><a class="btn btn-accent" href="#contacts">Связаться с нами <span>↗</span></a></div></section>
+
+    <section class="section contact-section" id="contacts"><div class="container contact-layout">
+      <div class="contact-copy"><div class="eyebrow"><span></span> МЫ НА СВЯЗИ</div><h2>Расскажите,<br><em>что ищете.</em></h2><p>Оставьте контакты и коротко опишите задачу. Мы свяжемся с вами и обсудим следующий шаг.</p><div class="contact-detail"><span>ТЕЛЕФОН</span><a href="tel:+73842000000">+7 (3842) 00-00-00</a></div><div class="contact-detail"><span>ГОРОД</span><b>Кемерово</b></div><div class="contact-detail"><span>ПОЧТА</span><a href="mailto:hello@house-x.ru">hello@house-x.ru</a></div></div>
+      <form class="contact-form" id="contactForm"><div class="form-top"><b>Заявка на консультацию</b><span>01 / 01</span></div><label>Ваше имя<input name="name" type="text" placeholder="Как к вам обращаться" required minlength="2"></label><label>Телефон<input name="phone" type="tel" placeholder="+7 (___) ___-__-__" required></label><label>Что вас интересует?<select name="interest"><option>Покупка недвижимости</option><option>Продажа недвижимости</option><option>Сопровождение сделки</option><option>Другое</option></select></label><label>Комментарий<textarea name="message" rows="3" placeholder="Расскажите немного о задаче"></textarea></label><button class="btn btn-dark submit-btn" type="submit">Отправить заявку <span>↗</span></button><p class="form-note">Нажимая кнопку, вы соглашаетесь с обработкой персональных данных. Отправка формы будет подключена после настройки серверной части.</p><div class="form-feedback" id="formFeedback" role="status"></div></form>
+    </div></section>
+  </main>
+  <footer class="footer"><div class="container"><div class="footer-main"><a class="brand brand-footer" href="#"><span class="brand-mark">Х</span><span class="brand-name">ХАУС<span>-Х</span><small>АГЕНТСТВО НЕДВИЖИМОСТИ</small></span></a><p>Пространство для<br>вашей новой главы.</p><div class="footer-nav"><a href="#catalog">Каталог</a><a href="#services">Услуги</a><a href="#about">О компании</a><a href="#contacts">Контакты</a></div></div><div class="footer-bottom"><span>© 2026 ХАУС-Х. Все права защищены.</span><span>КЕМЕРОВО · РОССИЯ</span><a href="privacy.html">Политика конфиденциальности</a></div></div></footer>
+  <div class="modal" id="propertyModal" aria-hidden="true"><div class="modal-backdrop" data-close></div><div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><button class="modal-close" data-close aria-label="Закрыть">×</button><div id="modalContent"></div></div></div>
+</body>
+</html>
