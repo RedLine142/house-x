@@ -37,5 +37,25 @@
   menuToggle.addEventListener("click",()=>{const opened=sidebar.classList.toggle("open");menuToggle.setAttribute("aria-expanded",String(opened));});
   nav.addEventListener("click",e=>{const link=e.target.closest("a");if(link){sidebar.classList.remove("open");menuToggle.setAttribute("aria-expanded","false");nav.querySelectorAll("a").forEach(a=>a.classList.toggle("active",a===link));}});
   document.getElementById("contactForm").addEventListener("submit",e=>{e.preventDefault();const data=new FormData(e.currentTarget),phone=String(data.get("phone")||"").replace(/\D/g,""),feedback=document.getElementById("formFeedback");if(phone.length<10){feedback.textContent="Проверьте номер телефона — кажется, в нём не хватает цифр.";return;}feedback.textContent="Проверка данных пройдена. Приём заявок подключим на серверном этапе — сейчас данные никуда не отправляются.";});
+
+  // Subtle cursor light in the hero: makes the photographic X feel like a living interface.
+  const hero = document.querySelector(".brand-hero");
+  if (hero && window.matchMedia("(pointer:fine)").matches) {
+    hero.addEventListener("pointermove", event => {
+      const rect = hero.getBoundingClientRect();
+      hero.style.setProperty("--mx", ((event.clientX - rect.left) / rect.width * 100) + "%");
+      hero.style.setProperty("--my", ((event.clientY - rect.top) / rect.height * 100) + "%");
+    });
+  }
+  // Reveal large content blocks gently as they enter the viewport.
+  if ("IntersectionObserver" in window && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    const revealTargets = document.querySelectorAll(".quick-panel,.property-card,.service-tile,.about-strip,.contact-panel");
+    revealTargets.forEach(el => el.classList.add("will-reveal"));
+    const observer = new IntersectionObserver(entries => entries.forEach(entry => {
+      if (entry.isIntersecting) { entry.target.classList.add("is-visible"); observer.unobserve(entry.target); }
+    }), {threshold:0.08});
+    revealTargets.forEach(el => observer.observe(el));
+  }
+
   render();
 })();
