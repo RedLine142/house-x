@@ -148,3 +148,7 @@
  .section-top h2{font-size:48px}
 }
 @media(prefers-reduced-motion:reduce){.photo-x,.x-part,.property-image img,.property-card,.neon-button{transition:none!important;animation:none!important}}
+
+.will-reveal{opacity:0;transform:translateY(22px);transition:opacity .65s ease,transform .65s cubic-bezier(.2,.75,.2,1)}
+.will-reveal.is-visible{opacity:1;transform:translateY(0)}
+@media(prefers-reduced-motion:reduce){.will-reveal{opacity:1;transform:none;transition:none}}
