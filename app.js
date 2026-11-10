@@ -57,5 +57,16 @@
     revealTargets.forEach(el => observer.observe(el));
   }
 
+
+  // Animate newly added editorial sections when they enter the viewport.
+  if ("IntersectionObserver" in window && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    const newReveal = document.querySelectorAll(".universe-card,.manifesto-band,.process-steps article,.journal-grid article");
+    newReveal.forEach((el, index) => { el.classList.add("will-reveal"); el.style.transitionDelay = (index % 4) * 75 + "ms"; });
+    const newObserver = new IntersectionObserver(entries => entries.forEach(entry => {
+      if (entry.isIntersecting) { entry.target.classList.add("is-visible"); newObserver.unobserve(entry.target); }
+    }), {threshold:0.08});
+    newReveal.forEach(el => newObserver.observe(el));
+  }
+
   render();
 })();
