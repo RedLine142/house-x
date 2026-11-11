@@ -250,25 +250,33 @@ a:hover .ui-arrow,button:hover .ui-arrow,.service-tile:hover .ui-arrow{
 }
 
 
-/* Refined typographic ХАУС-X signature in the about strip */
-.about-strip{grid-template-columns:150px 1fr}
+/* Split-frame ХАУС-X signature: outline only, no fill */
+.about-strip{grid-template-columns:90px 1fr}
 .about-stamp{
-  width:auto;height:auto;min-height:0;border:0;
-  display:flex;align-items:baseline;justify-content:flex-start;
-  gap:5px;white-space:nowrap;letter-spacing:0;
-  color:#f1f5f7;font-size:0;line-height:1;
+  position:relative;width:68px;height:68px;min-height:68px;
+  box-sizing:border-box;border:1px solid var(--blue);
+  background:transparent;display:grid;
+  grid-template-rows:1fr 1fr;align-items:center;justify-items:center;
+  gap:0;padding:0;letter-spacing:0;line-height:1;
+}
+.about-stamp::after{
+  content:"";position:absolute;left:7px;right:7px;top:50%;
+  height:1px;background:var(--blue);opacity:.85;
 }
 .about-stamp .about-word{
-  color:#f1f5f7;font-size:19px;font-weight:800;
-  letter-spacing:.015em;
+  align-self:end;padding-bottom:5px;
+  color:#f1f5f7;font-size:13px;font-weight:800;
+  letter-spacing:-.045em;white-space:nowrap;
 }
 .about-stamp .about-x{
-  color:var(--blue);font-size:29px;font-weight:800;
-  line-height:.9;letter-spacing:-.08em;
-  text-shadow:0 0 18px #38d9ff38;
+  align-self:start;padding-top:4px;
+  color:var(--blue);font-size:25px;font-weight:800;
+  line-height:1;letter-spacing:-.08em;
+  text-shadow:0 0 14px #38d9ff30;
 }
 @media(max-width:760px){
-  .about-strip{grid-template-columns:1fr;gap:14px}
-  .about-stamp .about-word{font-size:18px}
-  .about-stamp .about-x{font-size:27px}
+  .about-strip{grid-template-columns:74px 1fr;gap:14px}
+  .about-stamp{width:64px;height:64px;min-height:64px}
+  .about-stamp .about-word{font-size:12px}
+  .about-stamp .about-x{font-size:23px}
 }
