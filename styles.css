@@ -226,7 +226,7 @@
 .manifesto-band .manifesto-copy h2 em{color:#ff2d55!important;-webkit-text-fill-color:#ff2d55!important;font-style:normal;font-weight:900;text-shadow:0 1px 0 rgba(0,0,0,.08)}
 
 
-/* Minimal 90-degree corner arrow, matching the supplied reference. */
+/* Corner arrow: all three strokes meet at one precise upper-right point. */
 .ui-arrow{
   position:relative;
   display:inline-block;
@@ -244,24 +244,24 @@
   vertical-align:middle;
   transition:transform .22s ease,opacity .22s ease;
 }
-/* Diagonal stem rises from bottom-left into the upper-right corner. */
+/* Diagonal shaft ends exactly at the corner of the arrowhead. */
 .ui-arrow::before{
   content:"";
   position:absolute;
-  left:2px;
-  bottom:3px;
-  width:14px;
+  left:-5px;
+  top:0;
+  width:20px;
   height:1.4px;
   background:currentColor;
   transform:rotate(-45deg);
   transform-origin:right center;
 }
-/* The arrowhead is an open 90-degree corner: horizontal + vertical. */
+/* Open horizontal and vertical strokes form the 90-degree head. */
 .ui-arrow::after{
   content:"";
   position:absolute;
-  top:1px;
-  right:1px;
+  top:0;
+  right:0;
   width:8px;
   height:8px;
   border-top:1.4px solid currentColor;
