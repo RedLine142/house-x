@@ -183,7 +183,7 @@
 .manifesto-mark{font-size:clamp(130px,18vw,240px);font-weight:800;line-height:.7;letter-spacing:-.14em;color:#10160c;opacity:.95}
 .manifesto-copy .eyebrow{color:#45552c}
 .manifesto-copy h2{font-size:clamp(42px,5.5vw,74px);line-height:.91;letter-spacing:-.08em;margin:17px 0 0}
-.manifesto-copy h2 em{font-style:normal;color:#526c14}
+.manifesto-copy h2 em{font-style:normal;color:#087CFF}
 .manifesto-aside p{font-size:12px;line-height:1.8;max-width:270px;color:#344321}
 .manifesto-aside a{display:inline-flex;gap:24px;align-items:center;border-bottom:1px solid #344321;padding:12px 0;font-size:10px;font-weight:800}
 .manifesto-aside a b{font-size:17px}
