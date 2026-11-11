@@ -69,5 +69,17 @@
     newReveal.forEach(el => newObserver.observe(el));
   }
 
+  // Back-to-top control appears after the visitor passes half of the page.
+  const backToTop = document.getElementById("backToTop");
+  if (backToTop) {
+    const updateBackToTop = () => {
+      backToTop.classList.toggle("is-visible", window.scrollY > (document.documentElement.scrollHeight - window.innerHeight) / 2);
+    };
+    window.addEventListener("scroll", updateBackToTop, {passive:true});
+    window.addEventListener("resize", updateBackToTop);
+    backToTop.addEventListener("click", () => window.scrollTo({top:0, behavior:"smooth"}));
+    updateBackToTop();
+  }
+
   render();
 })();
