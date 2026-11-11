@@ -48,32 +48,26 @@
       hero.style.setProperty("--my", ((event.clientY - rect.top) / rect.height * 100) + "%");
     });
   }
-  // Scroll-linked X aperture: photographs stay fixed; only the thin shutter geometry rotates.
+  // Scroll-linked hero X: progress runs from 0 to 90 degrees across the hero block.
   const photoX = document.querySelector(".photo-x");
-  const reduceXMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-  if (photoX && !reduceXMotion.matches) {
+  if (photoX) {
     let xFrame = 0;
     const updateXRotation = () => {
       if (xFrame) return;
       xFrame = window.requestAnimationFrame(() => {
         xFrame = 0;
         const hero = photoX.closest(".brand-hero");
-        const heroTop = hero ? hero.getBoundingClientRect().top + window.scrollY : 0;
-        const blockHeight = hero ? hero.offsetHeight : window.innerHeight;
-        const progress = Math.max(0, Math.min(1, (window.scrollY - heroTop) / Math.max(1, blockHeight)));
+        if (!hero) return;
+        const heroTop = hero.getBoundingClientRect().top + window.scrollY;
+        const blockHeight = Math.max(1, hero.offsetHeight);
+        const progress = Math.max(0, Math.min(1, (window.scrollY - heroTop) / blockHeight));
         const angle = progress * 90;
-        photoX.style.transform = "rotate(" + angle.toFixed(2) + "deg)";
+        // Important is required to override legacy .photo-x transform rules.
+        photoX.style.setProperty("transform", "rotate(" + angle.toFixed(2) + "deg)", "important");
       });
     };
     window.addEventListener("scroll", updateXRotation, {passive:true});
     window.addEventListener("resize", updateXRotation);
-    reduceXMotion.addEventListener && reduceXMotion.addEventListener("change", event => {
-      if (event.matches) {
-        window.removeEventListener("scroll", updateXRotation);
-        window.removeEventListener("resize", updateXRotation);
-        photoX.style.transform = "none";
-      }
-    });
     updateXRotation();
   }
 
