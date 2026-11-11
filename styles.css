@@ -480,3 +480,54 @@ a:hover .ui-arrow,button:hover .ui-arrow,.service-tile:hover .ui-arrow{
 @media(prefers-reduced-motion:reduce){
   .photo-x .x-rotor{transform:none!important}
 }
+
+
+/* Final hero X composition: four fixed photo sectors and a rotating reveal shutter. */
+.photo-x{
+  overflow:visible!important;
+  isolation:isolate;
+}
+.photo-x .x-part{
+  inset:0;
+  overflow:hidden;
+  opacity:0;
+  animation:x-photo-fill 1.05s cubic-bezier(.2,.72,.2,1) both;
+  will-change:opacity,filter;
+}
+.photo-x .x-home{
+  clip-path:polygon(0 0,100% 0,50% 50%);
+  animation-delay:.78s;
+}
+.photo-x .x-flat{
+  clip-path:polygon(100% 0,100% 100%,50% 50%);
+  animation-delay:1.12s;
+}
+.photo-x .x-reno{
+  clip-path:polygon(100% 100%,0 100%,50% 50%);
+  animation-delay:1.46s;
+}
+.photo-x .x-land{
+  clip-path:polygon(0 100%,0 0,50% 50%);
+  animation-delay:1.80s;
+}
+@keyframes x-photo-fill{
+  from{opacity:0;filter:brightness(.55) saturate(.4)}
+  to{opacity:1;filter:brightness(1) saturate(.9)}
+}
+.photo-x .x-rotor{
+  z-index:8;
+  overflow:visible;
+  transform-origin:50% 50%;
+}
+.photo-x .x-rotor-lines{
+  opacity:0;
+  animation:x-lines-arrive .55s ease-out .12s forwards;
+}
+@keyframes x-lines-arrive{
+  from{opacity:0}
+  to{opacity:1}
+}
+@media(prefers-reduced-motion:reduce){
+  .photo-x .x-part{opacity:1;animation:none!important}
+  .photo-x .x-rotor-lines{opacity:1;animation:none!important}
+}
