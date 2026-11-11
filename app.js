@@ -22,10 +22,32 @@
   }
   function openProperty(id) {
     const p = properties.find(item => item.id === Number(id)); if (!p) return;
-    modalContent.innerHTML = (p.image ? '<div class="modal-hero"><img src="' + p.image + '" alt="' + p.title + '"></div>' : '<div class="modal-hero" style="min-height:180px;display:grid;place-items:center;background:linear-gradient(135deg,#18232b,#0b0e12);color:#38d9ff;letter-spacing:.18em;font-weight:800">ХАУС-X</div>') + '<div class="modal-body"><div class="section-kicker"><span></span> ' + p.type.toUpperCase() + ' · ' + p.status.toUpperCase() + '</div><h2 id="modalTitle">' + p.title + '</h2><div class="property-location">' + p.location + '</div><div class="modal-facts"><span>' + area(p.area) + '</span>' + (p.rooms ? '<span>' + p.rooms + ' комнаты</span>' : '') + '<span>' + p.floor + '</span></div><div class="modal-price">' + money(p.price) + '</div><p>' + p.description + '</p><p><b>Особенности:</b> ' + p.features.join(" · ") + '</p>' + (p.details ? '<div class="property-details"><h3>Характеристики и описание</h3><ul>' + p.details.map(x => '<li>' + x + '</li>').join('') + '</ul></div>' : '') + '<div class="modal-actions"><a class="btn" href="#contacts" data-close>Запросить информацию <svg class="ui-arrow" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M3.5 12.5 12.5 3.5 M6 3.5h6.5V10" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="phone-action" href="tel:+79049627770">+7 (904) 962-77-70</a></div></div>';
+    const galleryMarkup = p.images && p.images.length
+      ? '<div class="property-gallery" data-gallery data-active="0"><div class="gallery-main"><img data-gallery-main src="' + p.images[0] + '" alt="' + p.title + ' — фото 1"><button class="gallery-arrow gallery-prev" type="button" data-gallery-prev aria-label="Предыдущее фото">‹</button><button class="gallery-arrow gallery-next" type="button" data-gallery-next aria-label="Следующее фото">›</button><span class="gallery-count" data-gallery-count>01 / ' + String(p.images.length).padStart(2,"0") + '</span></div><div class="gallery-thumbs">' + p.images.map((url,index) => '<button type="button" class="gallery-thumb' + (index===0?' active':'') + '" data-gallery-thumb="' + index + '" aria-label="Показать фото ' + (index+1) + '"><img src="' + url + '" alt="" loading="lazy"></button>').join("") + '</div></div>'
+      : (p.image ? '<div class="modal-hero"><img src="' + p.image + '" alt="' + p.title + '"></div>' : '<div class="modal-hero" style="min-height:180px;display:grid;place-items:center;background:linear-gradient(135deg,#18232b,#0b0e12);color:#38d9ff;letter-spacing:.18em;font-weight:800">ХАУС-X</div>');
+    modalContent.innerHTML = galleryMarkup + '<div class="modal-body"><div class="section-kicker"><span></span> ' + p.type.toUpperCase() + ' · ' + p.status.toUpperCase() + '</div><h2 id="modalTitle">' + p.title + '</h2><div class="property-location">' + p.location + '</div><div class="modal-facts"><span>' + area(p.area) + '</span>' + (p.rooms ? '<span>' + p.rooms + ' комнаты</span>' : '') + '<span>' + p.floor + '</span></div><div class="modal-price">' + money(p.price) + '</div><p>' + p.description + '</p><p><b>Особенности:</b> ' + p.features.join(" · ") + '</p>' + (p.details ? '<div class="property-details"><h3>Характеристики и описание</h3><ul>' + p.details.map(x => '<li>' + x + '</li>').join('') + '</ul></div>' : '') + '<div class="modal-actions"><a class="btn" href="#contacts" data-close>Запросить информацию <svg class="ui-arrow" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M3.5 12.5 12.5 3.5 M6 3.5h6.5V10" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="phone-action" href="tel:+79049627770">+7 (904) 962-77-70</a></div></div>';
     modal.classList.add("open"); modal.setAttribute("aria-hidden","false"); document.body.classList.add("no-scroll");
   }
   function closeModal() { modal.classList.remove("open"); modal.setAttribute("aria-hidden","true"); document.body.classList.remove("no-scroll"); }
+  modalContent.addEventListener("click", e => {
+    const gallery = e.target.closest("[data-gallery]");
+    if (!gallery) return;
+    const thumbs = Array.from(gallery.querySelectorAll("[data-gallery-thumb]"));
+    if (!thumbs.length) return;
+    let index = Number(gallery.dataset.active || 0);
+    const thumb = e.target.closest("[data-gallery-thumb]");
+    if (thumb) index = Number(thumb.dataset.galleryThumb);
+    else if (e.target.closest("[data-gallery-prev]")) index = (index - 1 + thumbs.length) % thumbs.length;
+    else if (e.target.closest("[data-gallery-next]")) index = (index + 1) % thumbs.length;
+    else return;
+    gallery.dataset.active = String(index);
+    const image = gallery.querySelector("[data-gallery-main]");
+    image.src = thumbs[index].querySelector("img").src;
+    image.alt = "Фотография объекта — " + (index + 1);
+    gallery.querySelector("[data-gallery-count]").textContent = String(index + 1).padStart(2,"0") + " / " + String(thumbs.length).padStart(2,"0");
+    thumbs.forEach((item,i) => item.classList.toggle("active",i===index));
+    thumbs[index].scrollIntoView({block:"nearest",inline:"nearest",behavior:"smooth"});
+  });
   tabs.addEventListener("click", e => { const b=e.target.closest("button[data-filter]"); if(!b)return; activeFilter=b.dataset.filter; maxPrice=Infinity; document.getElementById("quickPrice").value="all"; tabs.querySelectorAll("button").forEach(x=>x.classList.toggle("active",x===b)); render(); });
   sort.addEventListener("change",render);
   grid.addEventListener("click",e=>{const f=e.target.closest("[data-fav]");if(f){e.stopPropagation();f.textContent=f.textContent==="♡"?"♥":"♡";f.classList.toggle("selected");return;}const c=e.target.closest("[data-id]");if(c)openProperty(c.dataset.id);});
