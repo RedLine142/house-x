@@ -220,3 +220,7 @@
 
 /* Listing card fallback while original property photos are being connected. */
 .property-image-placeholder{width:100%;height:100%;min-height:230px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;background:radial-gradient(circle at 70% 25%,rgba(56,217,255,.12),transparent 35%),linear-gradient(135deg,#18232b,#0b0e12);color:#38d9ff;letter-spacing:.2em;font-weight:800}.property-image-placeholder small{font-size:9px;letter-spacing:.16em;color:#9aa8b2;font-weight:600}.property-details{margin:26px 0;padding-top:18px;border-top:1px solid rgba(255,255,255,.1)}.property-details h3{font-size:15px;margin:0 0 14px}.property-details ul{margin:0;padding-left:19px;display:grid;gap:9px;color:#aeb8c1;line-height:1.55;font-size:13px}.property-details li::marker{color:#38d9ff}
+
+
+/* Force the manifesto highlight to remain vivid against the acid-green band. */
+.manifesto-band .manifesto-copy h2 em{color:#ff2d55!important;-webkit-text-fill-color:#ff2d55!important;font-style:normal;font-weight:900;text-shadow:0 1px 0 rgba(0,0,0,.08)}
