@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css?v=20261111-13">
-<script src="properties.js?v=20261111-7" defer></script><script src="app.js?v=20261111-12" defer></script>
+<script src="properties.js?v=20261111-7" defer></script><script src="app.js?v=20261111-13" defer></script>
 </head>
 <body>
 <div class="app-shell">
@@ -117,11 +117,11 @@
  </div>
 </section>
 <section class="journal-section" id="journal">
- <div class="journal-top"><div><span class="eyebrow"><i></i> ЖУРНАЛ ПРОСТРАНСТВА</span><h2>Идеи для<br><em>следующего шага.</em></h2></div><span class="journal-note">ПОЛЕЗНОЕ / ХАУС-X</span></div>
- <div class="journal-grid">
-  <article class="journal-feature"><div class="journal-photo journal-photo-one"></div><div class="journal-caption"><span>01 / ВЫБОР</span><h3>На что смотреть,<br>когда выбираешь дом</h3><p>Участок, конструктив, коммуникации и повседневный маршрут — важнее красивого фасада.</p></div></article>
-  <article class="journal-card"><div class="journal-photo journal-photo-two"></div><div class="journal-caption"><span>02 / ИНТЕРЬЕР</span><h3>Квартира как отражение характера</h3><p>Планировка и свет меняют ощущение пространства сильнее декора.</p></div></article>
-  <article class="journal-card"><div class="journal-photo journal-photo-three"></div><div class="journal-caption"><span>03 / ЗЕМЛЯ</span><h3>С чего начинается свой проект</h3><p>Категория земли, подъезд и коммуникации — первые пункты проверки.</p></div></article>
+ <div class="journal-top"><div><span class="eyebrow"><i></i> ЖУРНАЛ ПРОСТРАНСТВА</span><h2>Идеи для<br><em>следующего шага.</em></h2></div><div class="journal-tools"><span class="journal-note">ПОЛЕЗНОЕ / ХАУС-X</span><span class="journal-count" id="journalCount">08 МАТЕРИАЛОВ</span></div></div>
+ <div class="journal-carousel" aria-label="Статьи журнала ХАУС-X">
+  <button class="journal-control journal-prev" id="journalPrev" type="button" aria-label="Предыдущие статьи"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button>
+  <div class="journal-track" id="journalTrack" tabindex="0"></div>
+  <button class="journal-control journal-next" id="journalNext" type="button" aria-label="Следующие статьи"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></button>
  </div>
  <div class="journal-disclaimer">Редакционные материалы и практические заметки. Не являются юридической или технической экспертизой объекта.</div>
 </section>
