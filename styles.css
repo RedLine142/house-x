@@ -450,3 +450,33 @@ a:hover .ui-arrow,button:hover .ui-arrow,.service-tile:hover .ui-arrow{
   .photo-x .x-part{opacity:1;animation:none!important}
   .photo-x .x-rotor{transform:none!important}
 }
+
+
+/* Refined X: clean four-photo field, no captions, long cyan cross-lines and a moving reveal aperture. */
+.photo-x{overflow:visible!important;isolation:isolate}
+.photo-x .x-part b{display:none!important}
+.photo-x .x-rotor{
+  position:absolute;
+  z-index:8;
+  inset:-100%;
+  display:block;
+  width:300%;
+  height:300%;
+  overflow:visible;
+  pointer-events:none;
+  transform:rotate(0deg);
+  transform-origin:50% 50%;
+  will-change:transform;
+}
+.photo-x .x-rotor-lines{
+  fill:none;
+  stroke:#35dfff;
+  stroke-width:.42;
+  stroke-linecap:round;
+  vector-effect:non-scaling-stroke;
+  filter:drop-shadow(0 0 3px rgba(53,223,255,.62));
+}
+.photo-x .x-rotor-outline{display:none!important}
+@media(prefers-reduced-motion:reduce){
+  .photo-x .x-rotor{transform:none!important}
+}
