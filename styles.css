@@ -226,23 +226,49 @@
 .manifesto-band .manifesto-copy h2 em{color:#ff2d55!important;-webkit-text-fill-color:#ff2d55!important;font-style:normal;font-weight:900;text-shadow:0 1px 0 rgba(0,0,0,.08)}
 
 
-/* Unified minimal diagonal arrows: no tiles, fills or decorative backgrounds. */
+/* Minimal arrows are drawn with CSS, never rendered as emoji/font glyphs. */
 .ui-arrow{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  color:currentColor;
-  background:transparent!important;
+  position:relative;
+  display:inline-block;
+  flex:0 0 14px;
+  width:14px;
+  height:14px;
+  margin-left:8px;
+  color:inherit!important;
+  background:none!important;
   border:0!important;
-  box-shadow:none!important;
   border-radius:0!important;
-  font-family:Arial,sans-serif;
-  font-size:.92em;
-  font-weight:500;
-  line-height:1;
-  text-decoration:none;
+  box-shadow:none!important;
+  font-size:0!important;
+  line-height:0!important;
+  vertical-align:middle;
   transition:transform .22s ease,opacity .22s ease;
+}
+.ui-arrow::before{
+  content:"";
+  position:absolute;
+  width:11px;
+  height:1.3px;
+  left:1px;
+  top:7px;
+  background:currentColor;
+  transform:rotate(-45deg);
+  transform-origin:center;
+}
+.ui-arrow::after{
+  content:"";
+  position:absolute;
+  width:5px;
+  height:5px;
+  right:1px;
+  top:1px;
+  border-top:1.3px solid currentColor;
+  border-right:1.3px solid currentColor;
 }
 a:hover .ui-arrow,button:hover .ui-arrow,.service-tile:hover .ui-arrow{
   transform:translate(2px,-2px);
+}
+/* Keep arrows neutral; parent text color determines contrast on every surface. */
+.side-phone .ui-arrow,.top-contact .ui-arrow,.all-link .ui-arrow{
+  color:inherit!important;
 }
