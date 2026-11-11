@@ -844,3 +844,23 @@ a:hover .ui-arrow,button:hover .ui-arrow,.service-tile:hover .ui-arrow{
 /* Hero supporting line */
 .brand-hero-copy>.brand-hero-subline{margin:12px 0 0;color:#d5e0e5;font-size:clamp(13px,1.15vw,16px);font-weight:600;letter-spacing:.015em;line-height:1.55;}
 @media(max-width:600px){.brand-hero-copy>.brand-hero-subline{margin-top:9px;font-size:11px;line-height:1.5;max-width:310px}}
+
+
+/* Hero supporting line: keep the second message visibly separated under the lead. */
+.brand-hero-copy>.brand-hero-subline{
+  display:block!important;
+  visibility:visible!important;
+  opacity:1!important;
+  position:relative;
+  z-index:4;
+  max-width:680px;
+  margin:12px 0 0!important;
+  color:#d5e0e5!important;
+  font-size:clamp(13px,1.15vw,16px)!important;
+  font-weight:600!important;
+  letter-spacing:.015em;
+  line-height:1.55;
+}
+@media(max-width:600px){
+  .brand-hero-copy>.brand-hero-subline{margin-top:9px!important;font-size:12px!important;line-height:1.5;max-width:310px}
+}
