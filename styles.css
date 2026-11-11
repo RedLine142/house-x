@@ -531,3 +531,35 @@ a:hover .ui-arrow,button:hover .ui-arrow,.service-tile:hover .ui-arrow{
   .photo-x .x-part{opacity:1;animation:none!important}
   .photo-x .x-rotor-lines{opacity:1;animation:none!important}
 }
+
+
+/* Minimal hero mark: one bold standalone X, rotated only by page scroll. */
+.brand-hero h1 .photo-x{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:auto!important;
+  height:auto!important;
+  min-width:0;
+  flex:0 0 auto;
+  overflow:visible!important;
+  isolation:auto;
+  position:relative;
+  margin-left:.015em;
+  color:#35dfff;
+  font-family:inherit;
+  font-size:1.06em;
+  font-weight:800;
+  line-height:.78;
+  letter-spacing:-.105em;
+  transform:rotate(0deg);
+  transform-origin:50% 50%;
+  transition:none!important;
+  will-change:transform;
+  text-shadow:0 0 22px rgba(53,223,255,.12);
+}
+.brand-hero h1 .photo-x::before,
+.brand-hero h1 .photo-x::after{content:none!important;display:none!important}
+@media(prefers-reduced-motion:reduce){
+  .brand-hero h1 .photo-x{transform:none!important}
+}
