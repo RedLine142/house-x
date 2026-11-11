@@ -282,42 +282,41 @@ a:hover .ui-arrow,button:hover .ui-arrow,.service-tile:hover .ui-arrow{
 }
 
 
-/* About signature: logo sits above the statement, not beside it. */
+/* About statement: typography is the focus; no separate logo tile. */
 .about-strip{
-  display:grid!important;
-  grid-template-columns:1fr!important;
-  grid-template-rows:auto auto!important;
-  align-items:start!important;
-  justify-items:start!important;
-  gap:18px!important;
+  display:block!important;
+  padding:clamp(30px,5vw,58px)!important;
+  background:linear-gradient(105deg,#111a21,#0d1217);
+  border-color:#2d3d47;
 }
-.about-stamp{
-  grid-column:1!important;
-  grid-row:1!important;
-  width:76px!important;
-  height:76px!important;
-  min-height:76px!important;
-  transform:none!important;
-  margin:0 0 2px!important;
-  border-color:var(--blue)!important;
-  background:transparent!important;
-}
-.about-strip>div:not(.about-stamp){
-  grid-column:1!important;
-  grid-row:2!important;
-}
+.about-strip .about-message{max-width:100%}
 .about-strip h2{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
   margin:0!important;
-  font-size:clamp(29px,3.5vw,42px)!important;
+  font-size:clamp(30px,4.2vw,54px)!important;
   line-height:1.08!important;
+  letter-spacing:-.065em;
+}
+.about-strip h2 span{
+  color:#f1f5f7;
+  font-size:.72em;
+  font-weight:500;
+  letter-spacing:-.045em;
+}
+.about-strip h2 em{
+  display:block;
+  color:var(--acid)!important;
+  font-style:normal;
+  font-weight:700;
 }
 @media(max-width:760px){
-  .about-strip{gap:15px!important;padding:23px!important}
-  .about-stamp{width:68px!important;height:68px!important;min-height:68px!important}
-  .about-strip h2{font-size:25px!important}
+  .about-strip{padding:27px 22px!important}
+  .about-strip h2{font-size:clamp(27px,7.5vw,38px)!important;gap:9px}
 }
-
-
+ 
+ 
 /* Sidebar navigation icons: consistent thin-line set. */
 .side-nav .nav-icon{width:18px;height:18px;flex:0 0 18px;display:block;fill:none;stroke:var(--blue);stroke-width:1.55;stroke-linecap:round;stroke-linejoin:round;transition:stroke .2s;}
 .side-nav a:hover .nav-icon,.side-nav a.active .nav-icon{stroke:var(--acid);}
