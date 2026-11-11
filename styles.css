@@ -839,3 +839,8 @@ a:hover .ui-arrow,button:hover .ui-arrow,.service-tile:hover .ui-arrow{
 @media(prefers-reduced-motion:reduce){
   .manifesto-aside .manifesto-cta{transition:none}
 }
+
+
+/* Hero supporting line */
+.brand-hero-copy>.brand-hero-subline{margin:12px 0 0;color:#d5e0e5;font-size:clamp(13px,1.15vw,16px);font-weight:600;letter-spacing:.015em;line-height:1.55;}
+@media(max-width:600px){.brand-hero-copy>.brand-hero-subline{margin-top:9px;font-size:11px;line-height:1.5;max-width:310px}}
