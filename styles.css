@@ -316,3 +316,8 @@ a:hover .ui-arrow,button:hover .ui-arrow,.service-tile:hover .ui-arrow{
   .about-stamp{width:68px!important;height:68px!important;min-height:68px!important}
   .about-strip h2{font-size:25px!important}
 }
+
+
+/* Sidebar navigation icons: consistent thin-line set. */
+.side-nav .nav-icon{width:18px;height:18px;flex:0 0 18px;display:block;fill:none;stroke:var(--blue);stroke-width:1.55;stroke-linecap:round;stroke-linejoin:round;transition:stroke .2s;}
+.side-nav a:hover .nav-icon,.side-nav a.active .nav-icon{stroke:var(--acid);}
