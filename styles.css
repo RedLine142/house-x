@@ -226,9 +226,8 @@
 .manifesto-band .manifesto-copy h2 em{color:#ff2d55!important;-webkit-text-fill-color:#ff2d55!important;font-style:normal;font-weight:900;text-shadow:0 1px 0 rgba(0,0,0,.08)}
 
 
-/* Corner arrow: all three strokes meet at one precise upper-right point. */
+/* SVG arrow matching the user's reference: straight diagonal shaft and exact 90-degree head. */
 .ui-arrow{
-  position:relative;
   display:inline-block;
   flex:0 0 16px;
   width:16px;
@@ -239,38 +238,16 @@
   border:0!important;
   border-radius:0!important;
   box-shadow:none!important;
-  font-size:0!important;
-  line-height:0!important;
   vertical-align:middle;
+  overflow:visible;
   transition:transform .22s ease,opacity .22s ease;
 }
-/* Diagonal shaft ends exactly at the corner of the arrowhead. */
-.ui-arrow::before{
-  content:"";
-  position:absolute;
-  left:-5px;
-  top:0;
-  width:20px;
-  height:1.4px;
-  background:currentColor;
-  transform:rotate(-45deg);
-  transform-origin:right center;
-}
-/* Open horizontal and vertical strokes form the 90-degree head. */
-.ui-arrow::after{
-  content:"";
-  position:absolute;
-  top:0;
-  right:0;
-  width:8px;
-  height:8px;
-  border-top:1.4px solid currentColor;
-  border-right:1.4px solid currentColor;
+.ui-arrow path{
+  vector-effect:non-scaling-stroke;
 }
 a:hover .ui-arrow,button:hover .ui-arrow,.service-tile:hover .ui-arrow{
   transform:translate(2px,-2px);
 }
-/* Parent text color controls arrow contrast on every surface. */
 .side-phone .ui-arrow,.top-contact .ui-arrow,.all-link .ui-arrow{
   color:inherit!important;
 }
