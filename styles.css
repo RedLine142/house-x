@@ -226,13 +226,13 @@
 .manifesto-band .manifesto-copy h2 em{color:#ff2d55!important;-webkit-text-fill-color:#ff2d55!important;font-style:normal;font-weight:900;text-shadow:0 1px 0 rgba(0,0,0,.08)}
 
 
-/* Thin right-pointing arrows: CSS geometry, no emoji or font glyphs. */
+/* Minimal 90-degree corner arrow, matching the supplied reference. */
 .ui-arrow{
   position:relative;
   display:inline-block;
   flex:0 0 16px;
   width:16px;
-  height:12px;
+  height:16px;
   margin-left:8px;
   color:inherit!important;
   background:none!important;
@@ -244,30 +244,31 @@
   vertical-align:middle;
   transition:transform .22s ease,opacity .22s ease;
 }
-/* Straight shaft pointing right. */
+/* Diagonal stem rises from bottom-left into the upper-right corner. */
 .ui-arrow::before{
   content:"";
   position:absolute;
-  left:1px;
-  top:5.5px;
-  width:13px;
-  height:1.2px;
+  left:2px;
+  bottom:3px;
+  width:14px;
+  height:1.4px;
   background:currentColor;
+  transform:rotate(-45deg);
+  transform-origin:right center;
 }
-/* Open 90-degree arrowhead, facing right. */
+/* The arrowhead is an open 90-degree corner: horizontal + vertical. */
 .ui-arrow::after{
   content:"";
   position:absolute;
+  top:1px;
   right:1px;
-  top:2px;
-  width:6px;
-  height:6px;
-  border-top:1.2px solid currentColor;
-  border-right:1.2px solid currentColor;
-  transform:rotate(45deg);
+  width:8px;
+  height:8px;
+  border-top:1.4px solid currentColor;
+  border-right:1.4px solid currentColor;
 }
 a:hover .ui-arrow,button:hover .ui-arrow,.service-tile:hover .ui-arrow{
-  transform:translateX(2px);
+  transform:translate(2px,-2px);
 }
 /* Parent text color controls arrow contrast on every surface. */
 .side-phone .ui-arrow,.top-contact .ui-arrow,.all-link .ui-arrow{
