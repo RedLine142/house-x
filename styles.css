@@ -226,22 +226,24 @@
 .manifesto-band .manifesto-copy h2 em{color:#ff2d55!important;-webkit-text-fill-color:#ff2d55!important;font-style:normal;font-weight:900;text-shadow:0 1px 0 rgba(0,0,0,.08)}
 
 
-/* Restore the earlier thin, minimal diagonal arrow. */
+/* Minimal thin SVG arrow: transparent, no tile, no emoji glyph. */
 .ui-arrow{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
+  display:inline-block;
+  flex:0 0 16px;
+  width:16px;
+  height:16px;
+  margin-left:8px;
   color:currentColor;
   background:transparent!important;
   border:0!important;
-  box-shadow:none!important;
   border-radius:0!important;
-  font-family:Arial,sans-serif;
-  font-size:.92em;
-  font-weight:400;
-  line-height:1;
-  text-decoration:none;
+  box-shadow:none!important;
+  vertical-align:middle;
+  overflow:visible;
   transition:transform .22s ease,opacity .22s ease;
+}
+.ui-arrow path{
+  vector-effect:non-scaling-stroke;
 }
 a:hover .ui-arrow,button:hover .ui-arrow,.service-tile:hover .ui-arrow{
   transform:translate(2px,-2px);
