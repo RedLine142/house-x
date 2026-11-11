@@ -62,7 +62,7 @@
         const heroTop = hero ? hero.getBoundingClientRect().top + window.scrollY : 0;
         const distance = Math.max(0, window.scrollY - Math.max(0, heroTop - 80));
         const progress = Math.min(1, distance / 1150);
-        const angle = progress * 105;
+        const angle = progress * 45;
         xRotor.style.transform = "rotate(" + angle.toFixed(2) + "deg)";
       });
     };
