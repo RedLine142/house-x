@@ -226,13 +226,13 @@
 .manifesto-band .manifesto-copy h2 em{color:#ff2d55!important;-webkit-text-fill-color:#ff2d55!important;font-style:normal;font-weight:900;text-shadow:0 1px 0 rgba(0,0,0,.08)}
 
 
-/* Minimal arrows are drawn with CSS, never rendered as emoji/font glyphs. */
+/* Thin right-pointing arrows: CSS geometry, no emoji or font glyphs. */
 .ui-arrow{
   position:relative;
   display:inline-block;
-  flex:0 0 14px;
-  width:14px;
-  height:14px;
+  flex:0 0 16px;
+  width:16px;
+  height:12px;
   margin-left:8px;
   color:inherit!important;
   background:none!important;
@@ -244,31 +244,32 @@
   vertical-align:middle;
   transition:transform .22s ease,opacity .22s ease;
 }
+/* Straight shaft pointing right. */
 .ui-arrow::before{
   content:"";
   position:absolute;
-  width:11px;
-  height:1.3px;
   left:1px;
-  top:7px;
+  top:5.5px;
+  width:13px;
+  height:1.2px;
   background:currentColor;
-  transform:rotate(-45deg);
-  transform-origin:center;
 }
+/* Open 90-degree arrowhead, facing right. */
 .ui-arrow::after{
   content:"";
   position:absolute;
-  width:5px;
-  height:5px;
   right:1px;
-  top:1px;
-  border-top:1.3px solid currentColor;
-  border-right:1.3px solid currentColor;
+  top:2px;
+  width:6px;
+  height:6px;
+  border-top:1.2px solid currentColor;
+  border-right:1.2px solid currentColor;
+  transform:rotate(45deg);
 }
 a:hover .ui-arrow,button:hover .ui-arrow,.service-tile:hover .ui-arrow{
-  transform:translate(2px,-2px);
+  transform:translateX(2px);
 }
-/* Keep arrows neutral; parent text color determines contrast on every surface. */
+/* Parent text color controls arrow contrast on every surface. */
 .side-phone .ui-arrow,.top-contact .ui-arrow,.all-link .ui-arrow{
   color:inherit!important;
 }
