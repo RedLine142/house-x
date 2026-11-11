@@ -50,9 +50,8 @@
   }
   // Scroll-linked X aperture: photographs stay fixed; only the thin shutter geometry rotates.
   const photoX = document.querySelector(".photo-x");
-  const xRotor = photoX && photoX.querySelector(".x-rotor");
   const reduceXMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-  if (photoX && xRotor && !reduceXMotion.matches) {
+  if (photoX && !reduceXMotion.matches) {
     let xFrame = 0;
     const updateXRotation = () => {
       if (xFrame) return;
@@ -60,10 +59,10 @@
         xFrame = 0;
         const hero = photoX.closest(".brand-hero");
         const heroTop = hero ? hero.getBoundingClientRect().top + window.scrollY : 0;
-        const distance = Math.max(0, window.scrollY - Math.max(0, heroTop - 80));
-        const progress = Math.min(1, distance / 1150);
-        const angle = progress * 45;
-        xRotor.style.transform = "rotate(" + angle.toFixed(2) + "deg)";
+        const blockHeight = hero ? hero.offsetHeight : window.innerHeight;
+        const progress = Math.max(0, Math.min(1, (window.scrollY - heroTop) / Math.max(1, blockHeight)));
+        const angle = progress * 90;
+        photoX.style.transform = "rotate(" + angle.toFixed(2) + "deg)";
       });
     };
     window.addEventListener("scroll", updateXRotation, {passive:true});
@@ -72,7 +71,7 @@
       if (event.matches) {
         window.removeEventListener("scroll", updateXRotation);
         window.removeEventListener("resize", updateXRotation);
-        xRotor.style.transform = "none";
+        photoX.style.transform = "none";
       }
     });
     updateXRotation();
