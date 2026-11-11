@@ -280,3 +280,39 @@ a:hover .ui-arrow,button:hover .ui-arrow,.service-tile:hover .ui-arrow{
   .about-stamp .about-word{font-size:12px}
   .about-stamp .about-x{font-size:23px}
 }
+
+
+/* About signature: logo sits above the statement, not beside it. */
+.about-strip{
+  display:grid!important;
+  grid-template-columns:1fr!important;
+  grid-template-rows:auto auto!important;
+  align-items:start!important;
+  justify-items:start!important;
+  gap:18px!important;
+}
+.about-stamp{
+  grid-column:1!important;
+  grid-row:1!important;
+  width:76px!important;
+  height:76px!important;
+  min-height:76px!important;
+  transform:none!important;
+  margin:0 0 2px!important;
+  border-color:var(--blue)!important;
+  background:transparent!important;
+}
+.about-strip>div:not(.about-stamp){
+  grid-column:1!important;
+  grid-row:2!important;
+}
+.about-strip h2{
+  margin:0!important;
+  font-size:clamp(29px,3.5vw,42px)!important;
+  line-height:1.08!important;
+}
+@media(max-width:760px){
+  .about-strip{gap:15px!important;padding:23px!important}
+  .about-stamp{width:68px!important;height:68px!important;min-height:68px!important}
+  .about-strip h2{font-size:25px!important}
+}
