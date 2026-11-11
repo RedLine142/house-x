@@ -395,3 +395,6 @@ a:hover .ui-arrow,button:hover .ui-arrow,.service-tile:hover .ui-arrow{
  .journal-modal-cover{height:185px}.journal-modal-body{padding:21px 19px 25px}
 }
 @media(prefers-reduced-motion:reduce){.journal-track{scroll-behavior:auto}.journal-card,.journal-read svg{transition:none}}
+
+/* Journal cards are real links for crawlability; the click handler still opens the in-page reader. */
+.journal-card{text-decoration:none;color:inherit}
