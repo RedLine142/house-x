@@ -48,6 +48,36 @@
       hero.style.setProperty("--my", ((event.clientY - rect.top) / rect.height * 100) + "%");
     });
   }
+  // Scroll-linked X aperture: photographs stay fixed; only the thin shutter geometry rotates.
+  const photoX = document.querySelector(".photo-x");
+  const xRotor = photoX && photoX.querySelector(".x-rotor");
+  const reduceXMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  if (photoX && xRotor && !reduceXMotion.matches) {
+    let xFrame = 0;
+    const updateXRotation = () => {
+      if (xFrame) return;
+      xFrame = window.requestAnimationFrame(() => {
+        xFrame = 0;
+        const hero = photoX.closest(".brand-hero");
+        const heroTop = hero ? hero.getBoundingClientRect().top + window.scrollY : 0;
+        const distance = Math.max(0, window.scrollY - Math.max(0, heroTop - 80));
+        const progress = Math.min(1, distance / 1150);
+        const angle = progress * 105;
+        xRotor.style.transform = "rotate(" + angle.toFixed(2) + "deg)";
+      });
+    };
+    window.addEventListener("scroll", updateXRotation, {passive:true});
+    window.addEventListener("resize", updateXRotation);
+    reduceXMotion.addEventListener && reduceXMotion.addEventListener("change", event => {
+      if (event.matches) {
+        window.removeEventListener("scroll", updateXRotation);
+        window.removeEventListener("resize", updateXRotation);
+        xRotor.style.transform = "none";
+      }
+    });
+    updateXRotation();
+  }
+
   // Reveal large content blocks gently as they enter the viewport.
   if ("IntersectionObserver" in window && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
     const revealTargets = document.querySelectorAll(".quick-panel,.property-card,.service-tile,.about-strip,.contact-panel");
