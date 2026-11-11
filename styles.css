@@ -224,3 +224,25 @@
 
 /* Force the manifesto highlight to remain vivid against the acid-green band. */
 .manifesto-band .manifesto-copy h2 em{color:#ff2d55!important;-webkit-text-fill-color:#ff2d55!important;font-style:normal;font-weight:900;text-shadow:0 1px 0 rgba(0,0,0,.08)}
+
+
+/* Unified minimal diagonal arrows: no tiles, fills or decorative backgrounds. */
+.ui-arrow{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  color:currentColor;
+  background:transparent!important;
+  border:0!important;
+  box-shadow:none!important;
+  border-radius:0!important;
+  font-family:Arial,sans-serif;
+  font-size:.92em;
+  font-weight:500;
+  line-height:1;
+  text-decoration:none;
+  transition:transform .22s ease,opacity .22s ease;
+}
+a:hover .ui-arrow,button:hover .ui-arrow,.service-tile:hover .ui-arrow{
+  transform:translate(2px,-2px);
+}
