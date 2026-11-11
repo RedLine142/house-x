@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://redline142.github.io/house-x/sitemap.xml
