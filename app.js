@@ -48,7 +48,7 @@
       hero.style.setProperty("--my", ((event.clientY - rect.top) / rect.height * 100) + "%");
     });
   }
-  // Scroll-linked X mark: the centered symbol rotates 90 degrees across the hero.
+  // Scroll-linked X mark: the centered symbol makes one full 360-degree turn across the hero.
   const photoX = document.querySelector(".brand-hero-centered .photo-x");
   if (photoX) {
     let xFrame = 0;
@@ -60,7 +60,7 @@
         if (!hero) return;
         const heroTop = hero.getBoundingClientRect().top + window.scrollY;
         const progress = Math.max(0, Math.min(1, (window.scrollY - heroTop) / Math.max(1, hero.offsetHeight)));
-        photoX.style.setProperty("transform", "rotate(" + (progress * 90).toFixed(2) + "deg)", "important");
+        photoX.style.setProperty("transform", "rotate(" + (progress * 360).toFixed(2) + "deg)", "important");
       });
     };
     window.addEventListener("scroll", updateXRotation, {passive:true});
