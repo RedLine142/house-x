@@ -798,3 +798,44 @@ a:hover .ui-arrow,button:hover .ui-arrow,.service-tile:hover .ui-arrow{
 @media(prefers-reduced-motion:reduce){
   .manifesto-aside .manifesto-cta,.manifesto-aside .manifesto-cta span{transition:none}
 }
+
+
+/* Refined manifesto CTA: confident type, dark solid face, crisp pressed feedback. */
+.manifesto-aside .manifesto-cta{
+  display:inline-flex;
+  min-height:50px;
+  align-items:center;
+  justify-content:center;
+  padding:0 23px;
+  border:1px solid #10160c;
+  border-radius:0!important;
+  background:#10160c;
+  color:#f5f8ed;
+  box-shadow:0 5px 0 rgba(16,22,12,.22),0 10px 22px rgba(16,22,12,.13);
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:.015em;
+  line-height:1;
+  transition:transform .13s ease,box-shadow .13s ease,background .13s ease;
+  -webkit-tap-highlight-color:transparent;
+  touch-action:manipulation;
+}
+.manifesto-aside .manifesto-cta:hover{
+  border-radius:0!important;
+  background:#202b19;
+  box-shadow:0 5px 0 rgba(16,22,12,.25),0 13px 25px rgba(16,22,12,.16);
+}
+.manifesto-aside .manifesto-cta:active{
+  border-radius:0!important;
+  transform:translateY(4px);
+  background:#080c07;
+  box-shadow:0 1px 0 rgba(16,22,12,.3),0 3px 8px rgba(16,22,12,.12);
+}
+.manifesto-aside .manifesto-cta:focus-visible{
+  outline:2px solid #10160c;
+  outline-offset:4px;
+  border-radius:0!important;
+}
+@media(prefers-reduced-motion:reduce){
+  .manifesto-aside .manifesto-cta{transition:none}
+}
