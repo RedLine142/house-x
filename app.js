@@ -82,7 +82,7 @@
       '<a class="journal-card" href="articles/' + (article.slug || 'material-' + article.id) + '.html" data-article="' + article.id + '" aria-label="Открыть статью: ' + escapeHtml(article.title) + '">' +
       '<div class="journal-photo" style="background-image:url(&quot;' + article.image + '&quot;)"></div>' +
       '<div class="journal-caption"><span>' + String(article.id).padStart(2,"0") + ' / ' + escapeHtml(article.category) + '</span><h3>' + escapeHtml(article.title) + '</h3><p>' + escapeHtml(article.summary) + '</p>' +
-      '<span class="journal-read">Читать статью <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 12.5 12.5 3.5 M6 3.5h6.5V10"/></svg></span></div></article>'
+      '<span class="journal-read">Читать статью <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 12.5 12.5 3.5 M6 3.5h6.5V10"/></svg></span></div></a>'
     ).join("");
     const count = document.getElementById("journalCount");
     if (count) count.textContent = String(journalArticles.length).padStart(2,"0") + " МАТЕРИАЛОВ";
