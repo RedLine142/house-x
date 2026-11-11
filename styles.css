@@ -321,3 +321,27 @@ a:hover .ui-arrow,button:hover .ui-arrow,.service-tile:hover .ui-arrow{
 /* Sidebar navigation icons: consistent thin-line set. */
 .side-nav .nav-icon{width:18px;height:18px;flex:0 0 18px;display:block;fill:none;stroke:var(--blue);stroke-width:1.55;stroke-linecap:round;stroke-linejoin:round;transition:stroke .2s;}
 .side-nav a:hover .nav-icon,.side-nav a.active .nav-icon{stroke:var(--acid);}
+
+
+/* Services: four clear, consistent service cards. */
+.service-row{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;padding:58px 0 68px;background:transparent;border:0}
+.service-intro{grid-column:1/-1;padding:0 0 18px;background:transparent;display:grid;grid-template-columns:1fr auto;align-items:end;column-gap:24px}
+.service-kicker{display:flex;align-items:center;gap:10px;grid-column:1/-1;margin-bottom:12px;color:#81909b;font-size:9px;font-weight:800;letter-spacing:.16em}
+.service-kicker i{display:inline-block;width:22px;height:2px;background:var(--acid)}
+.service-intro h2{font-size:clamp(38px,4.5vw,58px);line-height:.98;letter-spacing:-.075em;margin:0}
+.service-intro h2 em{color:var(--blue)}
+.service-intro p{display:block;max-width:260px;margin:0 0 5px;color:#8997a1;font-size:11px;line-height:1.8}
+.service-tile{min-width:0;min-height:255px;padding:21px 20px 18px;background:linear-gradient(145deg,#151e26,#0f151b);border:1px solid #293741;display:flex;flex-direction:column;align-items:flex-start;position:relative;overflow:hidden;transition:transform .25s,border-color .25s,background .25s}
+.service-tile:before{content:"";position:absolute;left:0;top:0;width:2px;height:0;background:var(--acid);transition:height .25s}
+.service-tile:hover{transform:translateY(-4px);border-color:#47606a;background:linear-gradient(145deg,#192630,#10171d)}
+.service-tile:hover:before{height:100%}
+.service-number{font-size:8px;letter-spacing:.14em;font-weight:800;color:#71818c}
+.service-icon{width:48px;height:48px;margin:24px 0 19px;border:1px solid #31515d;background:#10212a;display:grid;place-items:center;color:var(--blue)}
+.service-icon svg{width:26px;height:26px;fill:none;stroke:currentColor;stroke-width:1.35;stroke-linecap:round;stroke-linejoin:round}
+.service-tile>b{font-size:23px;letter-spacing:-.055em;color:#f2f5f6}
+.service-tile>small{display:block;max-width:240px;margin-top:8px;color:#8b99a3;font-size:10px;line-height:1.7}
+.service-link{display:flex;align-items:center;gap:10px;margin-top:auto;padding-top:22px;color:var(--acid);font-size:9px;font-weight:800;letter-spacing:.02em}
+.service-link .ui-arrow{width:15px;height:15px;transition:transform .2s}
+.service-tile:hover .service-link .ui-arrow{transform:translate(2px,-2px)}
+@media(max-width:1100px){.service-row{grid-template-columns:repeat(2,minmax(0,1fr));}.service-intro{grid-column:1/-1}}
+@media(max-width:760px){.service-row{gap:9px;padding:42px 0 48px}.service-intro{display:block;padding-bottom:12px}.service-intro h2{font-size:clamp(35px,9vw,48px)}.service-intro p{margin-top:12px;max-width:320px}.service-tile{min-height:230px;padding:16px 14px 15px}.service-icon{width:42px;height:42px;margin:20px 0 15px}.service-icon svg{width:23px;height:23px}.service-tile>b{font-size:19px}.service-tile>small{font-size:9px;line-height:1.6}.service-link{font-size:8px;padding-top:18px}}
