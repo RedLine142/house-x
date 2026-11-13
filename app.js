@@ -5,7 +5,7 @@
   const sort = document.getElementById("sortSelect");
   const modal = document.getElementById("propertyModal");
   const modalContent = document.getElementById("modalContent");
-  let activeFilter = "all", maxPrice = Infinity;
+  let activeFilter = "all", maxPrice = Infinity, modalReturnFocus = null;
   const money = value => new Intl.NumberFormat("ru-RU").format(value) + " ₽";
   const area = value => Number.isInteger(value) ? value + " м²" : value.toLocaleString("ru-RU") + " м²";
   function render() {
@@ -22,13 +22,15 @@
   }
   function openProperty(id) {
     const p = properties.find(item => item.id === Number(id)); if (!p) return;
+    modalReturnFocus = document.activeElement;
     const galleryMarkup = p.images && p.images.length
       ? '<div class="property-gallery" data-gallery data-active="0"><div class="gallery-main"><img data-gallery-main src="' + p.images[0] + '" alt="' + p.title + ' — фото 1"><button class="gallery-arrow gallery-prev" type="button" data-gallery-prev aria-label="Предыдущее фото">‹</button><button class="gallery-arrow gallery-next" type="button" data-gallery-next aria-label="Следующее фото">›</button><span class="gallery-count" data-gallery-count>01 / ' + String(p.images.length).padStart(2,"0") + '</span></div><div class="gallery-thumbs">' + p.images.map((url,index) => '<button type="button" class="gallery-thumb' + (index===0?' active':'') + '" data-gallery-thumb="' + index + '" aria-label="Показать фото ' + (index+1) + '"><img src="' + url + '" alt="" loading="lazy"></button>').join("") + '</div>' + (p.images.findIndex(url => /plan\.(png|jpe?g|webp)$/i.test(url)) >= 0 ? '<div class="gallery-plan-row"><button class="gallery-plan-button" type="button" data-gallery-plan="' + p.images.findIndex(url => /plan\.(png|jpe?g|webp)$/i.test(url)) + '">ПЛАНИРОВКА</button></div>' : '') + '</div>'
       : (p.image ? '<div class="modal-hero"><img src="' + p.image + '" alt="' + p.title + '"></div>' : '<div class="modal-hero" style="min-height:180px;display:grid;place-items:center;background:linear-gradient(135deg,#18232b,#0b0e12);color:#38d9ff;letter-spacing:.18em;font-weight:800">ХАУС-X</div>');
     modalContent.innerHTML = galleryMarkup + '<div class="modal-body"><div class="section-kicker"><span></span> ' + p.type.toUpperCase() + ' · ' + p.status.toUpperCase() + '</div><h2 id="modalTitle">' + p.title + '</h2><div class="property-location">' + p.location + '</div><div class="modal-facts"><span>' + area(p.area) + '</span>' + (p.rooms ? '<span>' + p.rooms + ' комнаты</span>' : '') + '<span>' + p.floor + '</span></div><div class="modal-price">' + money(p.price) + '</div>' + '<p>' + p.description + '</p><p><b>Особенности:</b> ' + p.features.join(" · ") + '</p>' + (p.details ? '<div class="property-details"><h3>Характеристики и описание</h3><ul>' + p.details.map(x => '<li>' + x + '</li>').join('') + '</ul></div>' : '') + '<div class="modal-actions"><a class="btn" href="#contacts" data-close>Запросить информацию <svg class="ui-arrow" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M3.5 12.5 12.5 3.5 M6 3.5h6.5V10" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="phone-action" href="tel:+79049627770">+7 (904) 962-77-70</a></div></div>';
     modal.classList.add("open"); modal.setAttribute("aria-hidden","false"); document.body.classList.add("no-scroll");
+    const closeButton = modal.querySelector(".modal-close"); if (closeButton) closeButton.focus({preventScroll:true});
   }
-  function closeModal() { modal.classList.remove("open"); modal.setAttribute("aria-hidden","true"); document.body.classList.remove("no-scroll"); }
+  function closeModal() { modal.classList.remove("open"); modal.setAttribute("aria-hidden","true"); document.body.classList.remove("no-scroll"); if (modalReturnFocus && typeof modalReturnFocus.focus === "function") modalReturnFocus.focus({preventScroll:true}); modalReturnFocus = null; }
   modalContent.addEventListener("click", e => {
     const gallery = e.target.closest("[data-gallery]");
     if (!gallery) return;
@@ -54,11 +56,21 @@
   grid.addEventListener("click",e=>{const f=e.target.closest("[data-fav]");if(f){e.stopPropagation();f.textContent=f.textContent==="♡"?"♥":"♡";f.classList.toggle("selected");return;}const c=e.target.closest("[data-id]");if(c)openProperty(c.dataset.id);});
   grid.addEventListener("keydown",e=>{if((e.key==="Enter"||e.key===" ")&&e.target.matches("[data-id]")){e.preventDefault();openProperty(e.target.dataset.id);}});
   modal.addEventListener("click",e=>{if(e.target.matches("[data-close]")||e.target.classList.contains("modal-backdrop"))closeModal();});
-  document.addEventListener("keydown",e=>{if(e.key==="Escape")closeModal();});
+  document.addEventListener("keydown",e=>{if(e.key==="Escape"){closeModal();if(sidebar.classList.contains("open")){sidebar.classList.remove("open");menuToggle.setAttribute("aria-expanded","false");menuToggle.focus({preventScroll:true});}}});
   document.getElementById("quickSearch").addEventListener("submit",e=>{e.preventDefault();activeFilter=document.getElementById("quickType").value;const v=document.getElementById("quickPrice").value;maxPrice=v==="all"?Infinity:Number(v);tabs.querySelectorAll("button").forEach(b=>b.classList.toggle("active",b.dataset.filter===activeFilter));render();document.getElementById("catalog").scrollIntoView({behavior:"smooth"});});
   const menuToggle=document.getElementById("menuToggle"), nav=document.getElementById("mainNav"), sidebar=nav.closest(".sidebar");
   menuToggle.addEventListener("click",()=>{const opened=sidebar.classList.toggle("open");menuToggle.setAttribute("aria-expanded",String(opened));});
   nav.addEventListener("click",e=>{const link=e.target.closest("a");if(link){sidebar.classList.remove("open");menuToggle.setAttribute("aria-expanded","false");nav.querySelectorAll("a").forEach(a=>a.classList.toggle("active",a===link));}});
+  if ("IntersectionObserver" in window) {
+    const navLinks = Array.from(nav.querySelectorAll('a[href^="#"]'));
+    const navTargets = navLinks.map(link => document.querySelector(link.getAttribute("href"))).filter(Boolean);
+    const navObserver = new IntersectionObserver(entries => {
+      const visible = entries.filter(entry => entry.isIntersecting).sort((a,b) => b.intersectionRatio-a.intersectionRatio)[0];
+      if (!visible) return;
+      navLinks.forEach(link => link.classList.toggle("active",link.getAttribute("href") === "#" + visible.target.id));
+    }, {rootMargin:"-22% 0px -64% 0px",threshold:[0,.1,.25,.5]});
+    navTargets.forEach(target => navObserver.observe(target));
+  }
   document.querySelector(".workspace").addEventListener("click",e=>{if(!sidebar.classList.contains("open")||e.target.closest("#menuToggle"))return;sidebar.classList.remove("open");menuToggle.setAttribute("aria-expanded","false");});
   document.getElementById("contactForm").addEventListener("submit",e=>{e.preventDefault();const data=new FormData(e.currentTarget),phone=String(data.get("phone")||"").replace(/\D/g,""),feedback=document.getElementById("formFeedback");if(phone.length<10){feedback.textContent="Проверьте номер телефона — кажется, в нём не хватает цифр.";return;}feedback.textContent="Проверка данных пройдена. Приём заявок подключим на серверном этапе — сейчас данные никуда не отправляются.";});
 
@@ -93,7 +105,7 @@
 
   // Reveal large content blocks gently as they enter the viewport.
   if ("IntersectionObserver" in window && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-    const revealTargets = document.querySelectorAll(".quick-panel,.property-card,.service-tile,.about-strip,.contact-panel");
+    const revealTargets = document.querySelectorAll(".brand-hero,.direction-universe,.quick-panel,.catalog-section,.property-card,.service-row,.service-tile,.process-section,.journal-section,.about-strip,.contact-panel");
     revealTargets.forEach(el => el.classList.add("will-reveal"));
     const observer = new IntersectionObserver(entries => entries.forEach(entry => {
       if (entry.isIntersecting) { entry.target.classList.add("is-visible"); observer.unobserve(entry.target); }
@@ -140,6 +152,7 @@
   function openArticle(id) {
     const article = journalArticles.find(item => item.id === Number(id));
     if (!article) return;
+    modalReturnFocus = document.activeElement;
     modalContent.innerHTML =
       '<div class="journal-modal-cover" style="background-image:url(&quot;' + article.image + '&quot;)"><span>' + String(article.id).padStart(2,"0") + ' / ' + escapeHtml(article.category) + '</span></div>' +
       '<div class="journal-modal-body"><div class="journal-meta">ЖУРНАЛ ПРОСТРАНСТВА / ХАУС-X</div><h2 id="modalTitle">' + escapeHtml(article.title) + '</h2><p class="journal-lead">' + escapeHtml(article.lead) + '</p>' +
@@ -148,6 +161,7 @@
     journalModal.classList.add("open");
     journalModal.setAttribute("aria-hidden","false");
     document.body.classList.add("no-scroll");
+    const closeButton = journalModal.querySelector(".modal-close"); if (closeButton) closeButton.focus({preventScroll:true});
   }
   if (journalTrack) {
     journalTrack.addEventListener("click", event => {
