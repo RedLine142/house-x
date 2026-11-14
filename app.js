@@ -8,6 +8,19 @@
   let activeFilter = "all", maxPrice = Infinity, modalReturnFocus = null;
   const money = value => new Intl.NumberFormat("ru-RU").format(value) + " ₽";
   const area = value => Number.isInteger(value) ? value + " м²" : value.toLocaleString("ru-RU") + " м²";
+  function revealDynamicCards() {
+    if (!("IntersectionObserver" in window) || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const cards = grid.querySelectorAll(".property-card:not(.motion-ready)");
+    if (!cards.length) return;
+    const observer = new IntersectionObserver(entries => entries.forEach(entry => {
+      if (entry.isIntersecting) { entry.target.classList.add("is-visible"); observer.unobserve(entry.target); }
+    }), {threshold:0.06});
+    cards.forEach((card,index) => {
+      card.classList.add("will-reveal","motion-ready");
+      card.style.transitionDelay = (index % 3) * 65 + "ms";
+      observer.observe(card);
+    });
+  }
   function render() {
     let items = properties.filter(p => (activeFilter === "all" || p.type === activeFilter) && p.price <= maxPrice);
     if (sort.value === "cheap") items.sort((a,b) => a.price-b.price);
@@ -19,6 +32,7 @@
     ).join("") : '<div class="empty-state">Подходящих объектов пока нет. Измените параметры поиска или обратитесь к нам за персональным подбором.</div>';
     const count = document.querySelector('#filterTabs [data-filter="all"] sup');
     if (count) count.textContent = String(properties.length).padStart(2,"0");
+    revealDynamicCards();
   }
   function openProperty(id) {
     const p = properties.find(item => item.id === Number(id)); if (!p) return;
@@ -45,8 +59,13 @@
     else return;
     gallery.dataset.active = String(index);
     const image = gallery.querySelector("[data-gallery-main]");
+    image.classList.remove("gallery-image-change");
     image.src = thumbs[index].querySelector("img").src;
     image.alt = "Фотография объекта — " + (index + 1);
+    if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      void image.offsetWidth;
+      image.classList.add("gallery-image-change");
+    }
     gallery.querySelector("[data-gallery-count]").textContent = String(index + 1).padStart(2,"0") + " / " + String(thumbs.length).padStart(2,"0");
     thumbs.forEach((item,i) => item.classList.toggle("active",i===index));
     thumbs[index].scrollIntoView({block:"nearest",inline:"nearest",behavior:"smooth"});
@@ -194,4 +213,66 @@
   }
 
   render();
+
+  // A restrained reading-progress line follows the page without affecting layout.
+  const progress = document.createElement("div");
+  progress.className = "scroll-progress";
+  progress.setAttribute("aria-hidden","true");
+  progress.innerHTML = "<span></span>";
+  document.body.prepend(progress);
+  const progressFill = progress.firstElementChild;
+  let progressFrame = 0;
+  const updateProgress = () => {
+    if (progressFrame) return;
+    progressFrame = window.requestAnimationFrame(() => {
+      progressFrame = 0;
+      const distance = document.documentElement.scrollHeight - window.innerHeight;
+      const amount = distance > 0 ? Math.max(0,Math.min(1,window.scrollY / distance)) : 0;
+      progressFill.style.transform = "scaleX(" + amount.toFixed(4) + ")";
+    });
+  };
+  window.addEventListener("scroll",updateProgress,{passive:true});
+  window.addEventListener("resize",updateProgress);
+  updateProgress();
+
+  // Give editorial cards the same entrance treatment as the rest of the page.
+  if ("IntersectionObserver" in window && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    const cards = document.querySelectorAll(".journal-card:not(.motion-ready)");
+    const observer = new IntersectionObserver(entries => entries.forEach(entry => {
+      if (entry.isIntersecting) { entry.target.classList.add("is-visible"); observer.unobserve(entry.target); }
+    }), {threshold:0.06});
+    cards.forEach((card,index) => {
+      card.classList.add("will-reveal","motion-ready");
+      card.style.transitionDelay = (index % 4) * 65 + "ms";
+      observer.observe(card);
+    });
+  }
+
+  // Very light pointer tilt on larger screens; disabled for touch and reduced-motion users.
+  const motionCards = ".universe-card,.property-card,.service-tile,.journal-card";
+  if (window.matchMedia("(hover:hover) and (pointer:fine)").matches && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    let activeCard = null;
+    document.addEventListener("pointermove",event => {
+      const card = event.target.closest(motionCards);
+      if (activeCard && activeCard !== card) {
+        activeCard.style.setProperty("--tilt-x","0deg");
+        activeCard.style.setProperty("--tilt-y","0deg");
+      }
+      activeCard = card;
+      if (!card) return;
+      const rect = card.getBoundingClientRect();
+      const x = (event.clientX - rect.left) / Math.max(1,rect.width);
+      const y = (event.clientY - rect.top) / Math.max(1,rect.height);
+      card.style.setProperty("--tilt-x",((x - .5) * 3.2).toFixed(2) + "deg");
+      card.style.setProperty("--tilt-y",((.5 - y) * 3.2).toFixed(2) + "deg");
+    },{passive:true});
+    document.addEventListener("pointerout",event => {
+      const card = event.target.closest(motionCards);
+      if (card && !card.contains(event.relatedTarget)) {
+        card.style.setProperty("--tilt-x","0deg");
+        card.style.setProperty("--tilt-y","0deg");
+        if (activeCard === card) activeCard = null;
+      }
+    },{passive:true});
+  }
 })();
