@@ -1219,3 +1219,32 @@ main.bento-home{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:
   .property-card:first-child{grid-column:1;grid-row:auto}
   .property-card:first-child .property-image,.property-image{height:210px;min-height:210px}
 }
+
+
+/* MOTION SYSTEM / refined interactions */
+:root{--motion-out:cubic-bezier(.2,.75,.2,1)}
+.scroll-progress{position:fixed;z-index:120;top:0;left:0;width:100%;height:2px;pointer-events:none;background:rgba(198,255,61,.08)}
+.scroll-progress>span{display:block;width:100%;height:100%;background:var(--acid);transform:scaleX(0);transform-origin:left center;box-shadow:0 0 12px rgba(198,255,61,.55);will-change:transform}
+.brand-hero.brand-hero-centered:after{background:radial-gradient(ellipse at var(--mx,78%) var(--my,44%),rgba(198,255,61,.16),transparent 34%),linear-gradient(90deg,#111b20 0%,rgba(17,27,32,.96) 39%,rgba(17,27,32,.1) 100%)}
+.brand-hero-centered .hero-x-stroke{transform-box:fill-box;transform-origin:center;filter:drop-shadow(0 0 9px rgba(198,255,61,.18))}
+.brand-hero-centered .brand-hero-copy>.neon-button{transition:transform .35s var(--motion-out),box-shadow .35s,border-color .35s}
+.brand-hero-centered .brand-hero-copy>.neon-button:active,.form-submit:active,.search-submit:active{transform:scale(.975)}
+.universe-card,.property-card,.service-tile,.journal-card{transform-style:preserve-3d;backface-visibility:hidden}
+.universe-card,.property-card,.service-tile,.journal-card{transition-timing-function:var(--motion-out)}
+@media(hover:hover) and (pointer:fine){
+ .universe-card:hover,.property-card:hover,.service-tile:hover,.journal-card:hover{transform:perspective(1000px) rotateX(var(--tilt-y,0deg)) rotateY(var(--tilt-x,0deg)) translateY(-3px);box-shadow:0 18px 48px rgba(0,0,0,.2)}
+ .universe-card:hover{box-shadow:0 20px 52px rgba(0,0,0,.24),inset 0 0 0 1px rgba(198,255,61,.12)}
+ .property-card:hover{box-shadow:0 20px 52px rgba(0,0,0,.28),inset 0 0 0 1px rgba(198,255,61,.1)}
+ .service-tile:hover,.journal-card:hover{box-shadow:0 16px 40px rgba(0,0,0,.22)}
+}
+.modal.open .modal-backdrop{animation:modalBackdropIn .35s ease both}
+.modal.open .modal-panel{animation:modalPanelIn .48s var(--motion-out) both}
+@keyframes modalBackdropIn{from{opacity:0}to{opacity:1}}
+@keyframes modalPanelIn{from{opacity:0;transform:translateY(18px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
+.gallery-main>img.gallery-image-change{animation:galleryImageIn .38s var(--motion-out) both}
+@keyframes galleryImageIn{from{opacity:.45;transform:scale(1.012)}to{opacity:1;transform:scale(1)}}
+@media(prefers-reduced-motion:reduce){
+ .scroll-progress>span{transition:none}
+ .modal.open .modal-backdrop,.modal.open .modal-panel,.gallery-main>img.gallery-image-change{animation:none!important}
+ .universe-card,.property-card,.service-tile,.journal-card{transform:none!important}
+}
