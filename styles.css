@@ -1248,3 +1248,9 @@ main.bento-home{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:
  .modal.open .modal-backdrop,.modal.open .modal-panel,.gallery-main>img.gallery-image-change{animation:none!important}
  .universe-card,.property-card,.service-tile,.journal-card{transform:none!important}
 }
+
+/* Legal form consent control */
+.contact-form .form-consent{grid-column:1/-1;display:flex;align-items:flex-start;gap:10px;color:#aab7b0;font-size:10px;line-height:1.65}
+.contact-form .form-consent input{flex:0 0 17px;width:17px;min-height:17px;height:17px;margin:2px 0 0;accent-color:var(--acid)}
+.contact-form .form-consent a{color:var(--acid);text-decoration:underline;text-underline-offset:3px}
+@media(max-width:560px){.contact-form .form-consent{grid-column:1}}
