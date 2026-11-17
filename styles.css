@@ -1408,3 +1408,90 @@ main.bento-home{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:
   max-width:100%;
  }
 }
+
+
+/* HOUSE-X motion suite: restrained transitions, tactile states and scroll reveals */
+.property-card,.universe-card,.service-tile,.journal-card{
+ transform-style:preserve-3d;
+ backface-visibility:hidden;
+ transition:transform .42s cubic-bezier(.2,.75,.25,1),border-color .3s,box-shadow .35s,opacity .28s;
+}
+@media(hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference){
+ .property-card:hover,.universe-card:hover,.service-tile:hover,.journal-card:hover{
+  transform:perspective(950px) rotateX(var(--tilt-y,0deg)) rotateY(var(--tilt-x,0deg)) translateY(-3px);
+  box-shadow:0 18px 42px #0004,0 0 0 1px #c6ff3d12;
+ }
+}
+.property-card:active,.universe-card:active,.service-tile:active,.journal-card:active,
+.property-card.is-pressed,.universe-card.is-pressed,.service-tile.is-pressed,.journal-card.is-pressed,
+.btn:active,.search-submit:active,.manifesto-cta:active,.gallery-plan-button:active{
+ transform:scale(.985);
+}
+.property-card .property-image img{transition:transform .7s cubic-bezier(.2,.75,.25,1),filter .5s}
+.property-card:hover .property-image img{transform:scale(1.055)}
+.gallery-main{overflow:hidden}
+.gallery-main img{transition:opacity .22s ease,transform .42s cubic-bezier(.2,.75,.25,1)}
+.gallery-main img.gallery-image-change{animation:galleryImageIn .42s cubic-bezier(.2,.75,.25,1)}
+@keyframes galleryImageIn{from{opacity:.35;transform:scale(1.025)}to{opacity:1;transform:scale(1)}}
+
+/* Filter results cross-fade while keeping the existing sort/filter logic intact */
+.property-grid{transition:opacity .18s ease,transform .22s ease}
+.property-grid.is-updating{opacity:.28;transform:translateY(7px)}
+.property-grid[aria-busy="true"]{pointer-events:none}
+.property-card.will-reveal{transition:opacity .62s ease,transform .62s cubic-bezier(.2,.75,.2,1),border-color .3s,box-shadow .35s}
+.empty-state{animation:motionFadeUp .35s ease both}
+
+/* Modal and article window entrance/exit */
+.modal{
+ display:flex;
+ visibility:hidden;
+ opacity:0;
+ pointer-events:none;
+ transition:opacity .28s ease,visibility .28s ease;
+}
+.modal.open{display:flex;visibility:visible;opacity:1;pointer-events:auto}
+.modal-backdrop{opacity:0;transition:opacity .32s ease}
+.modal.open .modal-backdrop{opacity:1}
+.modal-panel{
+ opacity:0;
+ transform:translateY(22px) scale(.975);
+ transition:transform .38s cubic-bezier(.2,.8,.2,1),opacity .28s ease;
+ will-change:transform,opacity;
+}
+.modal.open .modal-panel{opacity:1;transform:translateY(0) scale(1)}
+.modal-close{transition:background .2s,border-color .2s,color .2s,transform .25s}
+.modal-close:hover{transform:rotate(90deg);border-color:var(--acid);color:var(--acid)}
+
+/* Soft lime edge-light for primary actions */
+.btn,.search-submit,.manifesto-cta,.gallery-plan-button,.neon-button{
+ position:relative;
+ isolation:isolate;
+ transition:transform .22s ease,box-shadow .28s ease,background-color .25s ease;
+}
+.btn:hover,.search-submit:hover,.manifesto-cta:hover,.gallery-plan-button:hover,.neon-button:hover{
+ box-shadow:0 0 0 1px #c6ff3d66,0 0 22px #c6ff3d28,0 8px 26px #0003;
+}
+.btn:focus-visible,.search-submit:focus-visible,.manifesto-cta:focus-visible,.gallery-plan-button:focus-visible{
+ outline:2px solid var(--acid);outline-offset:4px;
+}
+
+/* Sidebar icon micro-interactions */
+.side-nav a .nav-icon{transform-origin:center;transition:transform .28s cubic-bezier(.2,.8,.2,1),color .22s,filter .22s}
+.side-nav a:hover .nav-icon{transform:translateY(-2px) scale(1.08);filter:drop-shadow(0 0 5px #c6ff3d55)}
+.side-nav a.active .nav-icon{animation:navIconSettle .38s cubic-bezier(.2,.8,.2,1)}
+@keyframes navIconSettle{0%{transform:scale(.82)}65%{transform:scale(1.16)}100%{transform:scale(1)}}
+
+/* Additional section entrances, layered over the existing scroll reveal */
+.motion-section{opacity:0;transform:translateY(18px);transition:opacity .72s ease,transform .72s cubic-bezier(.2,.75,.2,1)}
+.motion-section.motion-in{opacity:1;transform:translateY(0)}
+@keyframes motionFadeUp{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:translateY(0)}}
+
+@media(max-width:760px){
+ .property-card:active,.universe-card:active,.service-tile:active,.journal-card:active{transform:scale(.99)}
+}
+@media(prefers-reduced-motion:reduce){
+ .property-card,.universe-card,.service-tile,.journal-card,.property-image img,.gallery-main img,
+ .modal,.modal-backdrop,.modal-panel,.modal-close,.btn,.search-submit,.manifesto-cta,.gallery-plan-button,
+ .side-nav a .nav-icon,.motion-section,.property-grid,.empty-state{animation:none!important;transition:none!important;transform:none!important}
+ .motion-section{opacity:1!important}
+}
