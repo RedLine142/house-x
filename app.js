@@ -250,7 +250,7 @@
         if (!entry.isIntersecting) return;
         counterObserver.unobserve(counter);
         counter.dataset.countAnimated = "true";
-        const target = Number(counter.dataset.countTarget || (counter.textContent.match(/\\d+/)||[0])[0]);
+        const target = Number(counter.dataset.countTarget || (counter.textContent.match(/\d+/)||[0])[0]);
         const suffix = " МАТЕРИАЛОВ";
         const duration = 850, startTime = performance.now();
         const tick = now => {
