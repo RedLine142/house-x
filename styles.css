@@ -1495,3 +1495,29 @@ main.bento-home{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:
  .side-nav a .nav-icon,.motion-section,.property-grid,.empty-state{animation:none!important;transition:none!important;transform:none!important}
  .motion-section{opacity:1!important}
 }
+
+
+/* Reliable touch scrolling inside property and journal dialogs, including iOS Safari */
+@media(max-width:760px){
+ .modal{
+  box-sizing:border-box;overflow:hidden;align-items:center;justify-content:center;
+  padding:max(10px,env(safe-area-inset-top)) 10px max(10px,env(safe-area-inset-bottom));
+  touch-action:pan-y;
+ }
+ .modal-panel{
+  box-sizing:border-box;width:100%;
+  height:calc(100dvh - max(20px,env(safe-area-inset-top)) - max(20px,env(safe-area-inset-bottom)));
+  max-height:calc(100dvh - max(20px,env(safe-area-inset-top)) - max(20px,env(safe-area-inset-bottom)));
+  min-height:0;overflow-x:hidden;overflow-y:auto;
+  -webkit-overflow-scrolling:touch;overscroll-behavior-y:contain;
+  touch-action:pan-y;scroll-behavior:smooth;
+  scrollbar-width:thin;scrollbar-color:#52616b transparent;
+ }
+ .modal-panel #modalContent{min-height:0;overflow:visible}
+ .modal-close{
+  position:sticky;float:right;top:10px;right:auto;
+  margin:10px 10px -46px auto;display:grid;place-items:center;flex:0 0 36px;
+ }
+ .modal-hero,.property-gallery,.journal-modal-cover{flex-shrink:0}
+}
+@media(max-width:760px) and (prefers-reduced-motion:reduce){.modal-panel{scroll-behavior:auto}}
