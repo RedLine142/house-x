@@ -21,18 +21,35 @@
       observer.observe(card);
     });
   }
+  let renderTimer = 0;
   function render() {
-    let items = properties.filter(p => (activeFilter === "all" || p.type === activeFilter) && p.price <= maxPrice);
-    if (sort.value === "cheap") items.sort((a,b) => a.price-b.price);
-    if (sort.value === "expensive") items.sort((a,b) => b.price-a.price);
-    grid.innerHTML = items.length ? items.map(p =>
-      '<article class="property-card" data-id="' + p.id + '" tabindex="0" aria-label="Подробнее: ' + p.title + '">' +
-      '<div class="property-image">' + (p.image ? '<img src="' + p.image + '" alt="' + p.title + '" loading="lazy">' : '<div class="property-image-placeholder" role="img" aria-label="Фотографии объекта скоро появятся"><span>ХАУС-X</span><small>ФОТОГАЛЕРЕЯ ГОТОВИТСЯ</small></div>') + '<span class="property-tag">' + p.status + '</span><button class="property-fav" type="button" aria-label="Добавить в избранное" data-fav>♡</button></div>' +
-      '<div class="property-info"><div class="property-meta"><span>' + p.type + '</span><span>ХАУС-Х / ' + String(p.id).padStart(3,"0") + '</span></div><h3 class="property-title">' + p.title + '</h3><div class="property-location">' + p.location + '</div><div class="property-specs"><span>' + area(p.area) + '</span>' + (p.rooms ? '<span>' + p.rooms + ' комнаты</span>' : '') + '<span>' + p.floor + '</span></div><div class="property-price-row"><b class="property-price">' + money(p.price) + '</b><span class="property-more">Подробнее <svg class="ui-arrow" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M3.5 12.5 12.5 3.5 M6 3.5h6.5V10" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div></div></article>'
-    ).join("") : '<div class="empty-state">Подходящих объектов пока нет. Измените параметры поиска или обратитесь к нам за персональным подбором.</div>';
-    const count = document.querySelector('#filterTabs [data-filter="all"] sup');
-    if (count) count.textContent = String(properties.length).padStart(2,"0");
-    revealDynamicCards();
+    const paint = () => {
+      let items = properties.filter(p => (activeFilter === "all" || p.type === activeFilter) && p.price <= maxPrice);
+      if (sort.value === "cheap") items.sort((a,b) => a.price-b.price);
+      if (sort.value === "expensive") items.sort((a,b) => b.price-a.price);
+      grid.innerHTML = items.length ? items.map(p =>
+        '<article class="property-card" data-id="' + p.id + '" tabindex="0" aria-label="Подробнее: ' + p.title + '">' +
+        '<div class="property-image">' + (p.image ? '<img src="' + p.image + '" alt="' + p.title + '" loading="lazy">' : '<div class="property-image-placeholder" role="img" aria-label="Фотографии объекта скоро появятся"><span>ХАУС-X</span><small>ФОТОГАЛЕРЕЯ ГОТОВИТСЯ</small></div>') + '<span class="property-tag">' + p.status + '</span><button class="property-fav" type="button" aria-label="Добавить в избранное" data-fav>♡</button></div>' +
+        '<div class="property-info"><div class="property-meta"><span>' + p.type + '</span><span>ХАУС-Х / ' + String(p.id).padStart(3,"0") + '</span></div><h3 class="property-title">' + p.title + '</h3><div class="property-location">' + p.location + '</div><div class="property-specs"><span>' + area(p.area) + '</span>' + (p.rooms ? '<span>' + p.rooms + ' комнаты</span>' : '') + '<span>' + p.floor + '</span></div><div class="property-price-row"><b class="property-price">' + money(p.price) + '</b><span class="property-more">Подробнее <svg class="ui-arrow" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M3.5 12.5 12.5 3.5 M6 3.5h6.5V10" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div></div></article>'
+      ).join("") : '<div class="empty-state">Подходящих объектов пока нет. Измените параметры поиска или обратитесь к нам за персональным подбором.</div>';
+      const count = document.querySelector('#filterTabs [data-filter="all"] sup');
+      if (count) count.textContent = String(properties.length).padStart(2,"0");
+      grid.setAttribute("aria-busy","false");
+      revealDynamicCards();
+    };
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || !grid.children.length) {
+      window.clearTimeout(renderTimer);
+      grid.classList.remove("is-updating");
+      paint();
+      return;
+    }
+    window.clearTimeout(renderTimer);
+    grid.setAttribute("aria-busy","true");
+    grid.classList.add("is-updating");
+    renderTimer = window.setTimeout(() => {
+      paint();
+      window.requestAnimationFrame(() => grid.classList.remove("is-updating"));
+    },90);
   }
   function openProperty(id) {
     const p = properties.find(item => item.id === Number(id)); if (!p) return;
@@ -42,6 +59,7 @@
       : (p.image ? '<div class="modal-hero"><img src="' + p.image + '" alt="' + p.title + '"></div>' : '<div class="modal-hero" style="min-height:180px;display:grid;place-items:center;background:linear-gradient(135deg,#18232b,#0b0e12);color:#38d9ff;letter-spacing:.18em;font-weight:800">ХАУС-X</div>');
     modalContent.innerHTML = galleryMarkup + '<div class="modal-body"><div class="section-kicker"><span></span> ' + p.type.toUpperCase() + ' · ' + p.status.toUpperCase() + '</div><h2 id="modalTitle">' + p.title + '</h2><div class="property-location">' + p.location + '</div><div class="modal-facts"><span>' + area(p.area) + '</span>' + (p.rooms ? '<span>' + p.rooms + ' комнаты</span>' : '') + '<span>' + p.floor + '</span></div><div class="modal-price">' + money(p.price) + '</div>' + '<p>' + p.description + '</p><p><b>Особенности:</b> ' + p.features.join(" · ") + '</p>' + (p.details ? '<div class="property-details"><h3>Характеристики и описание</h3><ul>' + p.details.map(x => '<li>' + x + '</li>').join('') + '</ul></div>' : '') + '<div class="modal-actions"><a class="btn" href="#contacts" data-close>Запросить информацию <svg class="ui-arrow" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M3.5 12.5 12.5 3.5 M6 3.5h6.5V10" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="phone-action" href="tel:+79049627770">+7 (904) 962-77-70</a></div></div>';
     modal.classList.add("open"); modal.setAttribute("aria-hidden","false"); document.body.classList.add("no-scroll");
+    modal.setAttribute("aria-labelledby","modalTitle");
     const closeButton = modal.querySelector(".modal-close"); if (closeButton) closeButton.focus({preventScroll:true});
   }
   function closeModal() { modal.classList.remove("open"); modal.setAttribute("aria-hidden","true"); document.body.classList.remove("no-scroll"); if (modalReturnFocus && typeof modalReturnFocus.focus === "function") modalReturnFocus.focus({preventScroll:true}); modalReturnFocus = null; }
@@ -175,7 +193,7 @@
       '<span class="journal-read">Читать статью <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 12.5 12.5 3.5 M6 3.5h6.5V10"/></svg></span></div></a>'
     ).join("");
     const count = document.getElementById("journalCount");
-    if (count) count.textContent = String(journalArticles.length).padStart(2,"0") + " МАТЕРИАЛОВ";
+    if (count) { count.dataset.countTarget = String(journalArticles.length); count.textContent = String(journalArticles.length).padStart(2,"0") + " МАТЕРИАЛОВ"; }
     updateJournalControls();
   }
   function updateJournalControls() {
@@ -215,6 +233,48 @@
     window.addEventListener("resize", updateJournalControls);
     renderJournal();
   }
+
+
+  // Subtle motion layer: counters, section reveals and tactile card feedback.
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if ("IntersectionObserver" in window && !reduceMotion) {
+    const revealTargets = document.querySelectorAll(".universe-heading,.manifesto-copy,.service-intro,.process-head,.journal-top,.about-strip,.contact-panel");
+    const sectionObserver = new IntersectionObserver(entries => entries.forEach(entry => {
+      if (entry.isIntersecting) { entry.target.classList.add("motion-in"); sectionObserver.unobserve(entry.target); }
+    }), {threshold:0.12});
+    revealTargets.forEach(el => { el.classList.add("motion-section"); sectionObserver.observe(el); });
+
+    const counter = document.getElementById("journalCount");
+    if (counter && !counter.dataset.countAnimated) {
+      const counterObserver = new IntersectionObserver(entries => entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        counterObserver.unobserve(counter);
+        counter.dataset.countAnimated = "true";
+        const target = Number(counter.dataset.countTarget || (counter.textContent.match(/\\d+/)||[0])[0]);
+        const suffix = " МАТЕРИАЛОВ";
+        const duration = 850, startTime = performance.now();
+        const tick = now => {
+          const progress = Math.min(1,(now-startTime)/duration);
+          const eased = 1-Math.pow(1-progress,3);
+          counter.textContent = String(Math.round(target*eased)).padStart(2,"0") + suffix;
+          if (progress<1) requestAnimationFrame(tick);
+        };
+        requestAnimationFrame(tick);
+      }), {threshold:0.6});
+      counterObserver.observe(counter);
+    }
+  }
+
+  // Press feedback works for mouse, keyboard and touch without hijacking links.
+  const tactileSelector = ".property-card,.universe-card,.service-tile,.journal-card,.btn,.search-submit,.manifesto-cta,.gallery-plan-button";
+  document.addEventListener("pointerdown",event=>{
+    const target=event.target.closest(tactileSelector);
+    if(target) target.classList.add("is-pressed");
+  },{passive:true});
+  ["pointerup","pointercancel","pointerout"].forEach(type=>document.addEventListener(type,event=>{
+    const target=event.target.closest(tactileSelector);
+    if(target && (type!=="pointerout" || !target.contains(event.relatedTarget))) target.classList.remove("is-pressed");
+  },{passive:true}));
 
   // Back-to-top control appears after the visitor passes half of the page.
   const backToTop = document.getElementById("backToTop");
