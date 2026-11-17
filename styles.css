@@ -1338,3 +1338,73 @@ main.bento-home{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:
 @media(prefers-reduced-motion:reduce){
  .sidebar,.sidebar .brand-word,.sidebar .side-nav a .nav-label{transition:none!important}
 }
+
+
+/* Mobile sidebar: full logo and unclipped footer */
+@media(max-width:760px){
+ .sidebar{
+  box-sizing:border-box;
+  height:100vh;
+  height:100dvh;
+  min-height:100svh;
+  padding-top:max(18px,env(safe-area-inset-top));
+  padding-bottom:max(18px,env(safe-area-inset-bottom));
+  overflow-x:hidden;
+  overflow-y:auto;
+  overscroll-behavior:contain;
+ }
+ .sidebar.open{
+  padding-top:max(22px,env(safe-area-inset-top));
+  padding-bottom:max(18px,env(safe-area-inset-bottom));
+ }
+ .sidebar .brand{
+  box-sizing:border-box;
+  display:flex;
+  flex:0 0 auto;
+  width:100%;
+  height:auto;
+  min-height:58px;
+  padding:10px 5px 22px;
+  align-items:center;
+  justify-content:flex-start;
+  overflow:visible;
+ }
+ .sidebar.open .brand{
+  height:auto;
+  min-height:70px;
+  padding:10px 5px 24px;
+ }
+ .sidebar .brand-word{
+  display:block;
+  flex:0 0 auto;
+  width:auto;
+  max-width:0;
+  font-size:17px;
+  line-height:1.35;
+  white-space:nowrap;
+  overflow:hidden;
+ }
+ .sidebar.open .brand-word{
+  max-width:190px;
+  overflow:visible;
+ }
+ .sidebar .side-nav{flex:0 0 auto}
+ .sidebar .sidebar-bottom{
+  box-sizing:border-box;
+  flex:0 0 auto;
+  width:100%;
+  max-height:none!important;
+  height:auto;
+  margin-top:auto;
+  padding-bottom:2px;
+  overflow:visible!important;
+ }
+ .sidebar.open .sidebar-bottom{
+  opacity:1;
+  pointer-events:auto;
+ }
+ .sidebar .side-help,.sidebar .side-phone,.sidebar .side-copy{
+  box-sizing:border-box;
+  max-width:100%;
+ }
+}
