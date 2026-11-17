@@ -1265,11 +1265,7 @@ main.bento-home{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:
  .brand-word{opacity:0;max-width:0;overflow:hidden;transition:opacity .18s ease,max-width .25s ease}
  .sidebar:hover:not(.is-scrolling) .brand,.sidebar:focus-within:not(.is-scrolling) .brand,.sidebar.is-expanded:not(.is-scrolling) .brand{justify-content:flex-start;padding:0 5px 48px}
  .sidebar:hover:not(.is-scrolling) .brand-word,.sidebar:focus-within:not(.is-scrolling) .brand-word,.sidebar.is-expanded:not(.is-scrolling) .brand-word{opacity:1;max-width:160px}
- .sidebar-expand{position:absolute;top:28px;right:-13px;width:27px;height:27px;display:grid;place-items:center;border:1px solid #35434c;border-radius:50%;background:#151d23;color:#c6ff3d;cursor:pointer;box-shadow:0 5px 18px #0006;transition:transform .25s ease,background .2s ease}
- .sidebar-expand:hover{background:#202b32}
- .sidebar-expand svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:transform .25s ease}
- .sidebar.is-expanded:not(.is-scrolling) .sidebar-expand svg,.sidebar:hover:not(.is-scrolling) .sidebar-expand svg,.sidebar:focus-within:not(.is-scrolling) .sidebar-expand svg{transform:rotate(180deg)}
- .side-nav{margin-top:32px;gap:7px}
+   .side-nav{margin-top:32px;gap:7px}
  .side-nav a{height:48px;min-width:0;padding:0;justify-content:center;gap:13px;border-radius:10px;white-space:nowrap;overflow:hidden}
  .side-nav a .nav-icon{width:20px;height:20px;min-width:20px;fill:none;stroke:currentColor;stroke-width:1.55;stroke-linecap:round;stroke-linejoin:round}
  .side-nav a .nav-label{opacity:0;max-width:0;overflow:hidden;transition:opacity .16s ease,max-width .25s ease}
@@ -1287,11 +1283,9 @@ main.bento-home{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:
  .sidebar.is-scrolling .brand-word,.sidebar.is-scrolling .side-nav a .nav-label{opacity:0!important;max-width:0!important}
  .sidebar.is-scrolling .side-nav a{justify-content:center!important;padding:0!important}
  .sidebar.is-scrolling .side-nav a b,.sidebar.is-scrolling .side-nav a .nav-dot,.sidebar.is-scrolling .sidebar-bottom{display:none!important}
- .sidebar.is-scrolling .sidebar-expand svg{transform:none!important}
 }
 @media(max-width:1100px) and (min-width:761px){.sidebar{width:76px;padding:22px 10px 16px}.workspace{margin-left:76px}}
 @media(max-width:760px){
- .sidebar-expand{display:none}
  .sidebar{width:260px;padding:29px 20px 20px;align-items:stretch}
  .brand{padding:0 5px 48px;justify-content:flex-start}
  .brand-word{opacity:1;max-width:none}
@@ -1302,5 +1296,45 @@ main.bento-home{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:
  .sidebar-bottom{opacity:1;max-height:none;overflow:visible;pointer-events:auto}
 }
 @media(prefers-reduced-motion:reduce){
- .sidebar,.sidebar-expand,.sidebar-expand svg,.brand-word,.side-nav a .nav-label,.sidebar-bottom{transition:none!important}
+ .sidebar,.brand-word,.side-nav a .nav-label,.sidebar-bottom{transition:none!important}
+}
+
+
+/* Mobile fixed icon rail */
+@media(max-width:760px){
+ .sidebar{
+  position:fixed;inset:0 auto 0 0;z-index:50;
+  width:64px;height:100dvh;min-height:100vh;
+  padding:18px 7px 14px;
+  transform:none!important;
+  overflow-x:hidden;overflow-y:auto;
+  background:#0e1217;border-right:1px solid var(--line);
+  box-shadow:8px 0 28px #0005;
+  transition:width .26s cubic-bezier(.2,.75,.25,1),padding .26s ease;
+  cursor:pointer;
+ }
+ .sidebar.open{width:252px;padding:24px 16px 16px}
+ .workspace{margin-left:64px}
+ .topbar{padding-left:14px}
+ #menuToggle{display:none!important}
+ .sidebar .brand{height:36px;padding:0;justify-content:center;overflow:hidden;white-space:nowrap}
+ .sidebar .brand-word{opacity:0;max-width:0;overflow:hidden;transition:opacity .18s ease,max-width .24s ease}
+ .sidebar.open .brand{justify-content:flex-start;padding:0 5px 34px}
+ .sidebar.open .brand-word{opacity:1;max-width:160px}
+ .sidebar .side-nav{display:grid;gap:7px;margin-top:26px}
+ .sidebar .side-nav a{height:46px;min-width:0;padding:0;justify-content:center;gap:13px;border-radius:9px;white-space:nowrap;overflow:hidden}
+ .sidebar .side-nav a .nav-icon{width:20px;height:20px;min-width:20px;fill:none;stroke:currentColor;stroke-width:1.55;stroke-linecap:round;stroke-linejoin:round}
+ .sidebar .side-nav a .nav-label{opacity:0;max-width:0;overflow:hidden;transition:opacity .16s ease,max-width .22s ease}
+ .sidebar .side-nav a b,.sidebar .side-nav a .nav-dot{display:none}
+ .sidebar.open .side-nav{margin-top:0}
+ .sidebar.open .side-nav a{justify-content:flex-start;padding:0 12px}
+ .sidebar.open .side-nav a .nav-label{opacity:1;max-width:170px}
+ .sidebar.open .side-nav a b,.sidebar.open .side-nav a .nav-dot{display:block}
+ .sidebar .side-nav a.active{background:#c6ff3d;color:#10160e;border-color:#c6ff3d;box-shadow:0 5px 22px #c6ff3d25}
+ .sidebar .side-nav a.active .nav-icon{color:#10160e}
+ .sidebar .sidebar-bottom{opacity:0;max-height:0;overflow:hidden;pointer-events:none}
+ .sidebar.open .sidebar-bottom{opacity:1;max-height:180px;overflow:visible;pointer-events:auto;margin-top:auto}
+}
+@media(prefers-reduced-motion:reduce){
+ .sidebar,.sidebar .brand-word,.sidebar .side-nav a .nav-label{transition:none!important}
 }
