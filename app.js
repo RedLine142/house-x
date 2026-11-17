@@ -75,7 +75,7 @@
   grid.addEventListener("click",e=>{const f=e.target.closest("[data-fav]");if(f){e.stopPropagation();f.textContent=f.textContent==="♡"?"♥":"♡";f.classList.toggle("selected");return;}const c=e.target.closest("[data-id]");if(c)openProperty(c.dataset.id);});
   grid.addEventListener("keydown",e=>{if((e.key==="Enter"||e.key===" ")&&e.target.matches("[data-id]")){e.preventDefault();openProperty(e.target.dataset.id);}});
   modal.addEventListener("click",e=>{if(e.target.matches("[data-close]")||e.target.classList.contains("modal-backdrop"))closeModal();});
-  document.addEventListener("keydown",e=>{if(e.key==="Escape"){closeModal();if(sidebar.classList.contains("open")){sidebar.classList.remove("open");menuToggle.setAttribute("aria-expanded","false");menuToggle.focus({preventScroll:true});}}});
+  document.addEventListener("keydown",e=>{if(e.key==="Escape"){closeModal();if(sidebar.classList.contains("open")){sidebar.classList.remove("open");menuToggle.setAttribute("aria-expanded","false");(window.innerWidth<=760?sidebar.querySelector(".brand"):menuToggle).focus({preventScroll:true});}}});
   document.getElementById("quickSearch").addEventListener("submit",e=>{e.preventDefault();activeFilter=document.getElementById("quickType").value;const v=document.getElementById("quickPrice").value;maxPrice=v==="all"?Infinity:Number(v);tabs.querySelectorAll("button").forEach(b=>b.classList.toggle("active",b.dataset.filter===activeFilter));render();document.getElementById("catalog").scrollIntoView({behavior:"smooth"});});
   const menuToggle=document.getElementById("menuToggle"), nav=document.getElementById("mainNav"), sidebar=nav.closest(".sidebar");
 
@@ -83,10 +83,19 @@
   menuToggle.addEventListener("click",()=>setSidebarOpen(!sidebar.classList.contains("open")));
   sidebar.addEventListener("click",e=>{
     if(window.innerWidth>760)return;
-    if(e.target.closest("a"))return;
+    if(e.target.closest("#mainNav a"))return;
+    if(e.target.closest(".brand"))e.preventDefault();
     setSidebarOpen(!sidebar.classList.contains("open"));
   });
   nav.addEventListener("click",e=>{const link=e.target.closest("a");if(link){sidebar.classList.remove("open");menuToggle.setAttribute("aria-expanded","false");nav.querySelectorAll("a").forEach(a=>a.classList.toggle("active",a===link));}});
+  let sidebarScrollTimer=0;
+  window.addEventListener("scroll",()=>{
+    if(window.innerWidth<=760)return;
+    sidebar.classList.add("is-scrolling");
+    sidebar.classList.remove("is-expanded");
+    window.clearTimeout(sidebarScrollTimer);
+    sidebarScrollTimer=window.setTimeout(()=>sidebar.classList.remove("is-scrolling"),700);
+  },{passive:true});
   if ("IntersectionObserver" in window) {
     const navLinks = Array.from(nav.querySelectorAll('a[href^="#"]'));
     const navTargets = navLinks.map(link => document.querySelector(link.getAttribute("href"))).filter(Boolean);
