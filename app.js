@@ -78,6 +78,24 @@
   document.addEventListener("keydown",e=>{if(e.key==="Escape"){closeModal();if(sidebar.classList.contains("open")){sidebar.classList.remove("open");menuToggle.setAttribute("aria-expanded","false");menuToggle.focus({preventScroll:true});}}});
   document.getElementById("quickSearch").addEventListener("submit",e=>{e.preventDefault();activeFilter=document.getElementById("quickType").value;const v=document.getElementById("quickPrice").value;maxPrice=v==="all"?Infinity:Number(v);tabs.querySelectorAll("button").forEach(b=>b.classList.toggle("active",b.dataset.filter===activeFilter));render();document.getElementById("catalog").scrollIntoView({behavior:"smooth"});});
   const menuToggle=document.getElementById("menuToggle"), nav=document.getElementById("mainNav"), sidebar=nav.closest(".sidebar");
+  const sidebarExpand=document.getElementById("sidebarExpand");
+  if(sidebarExpand){
+    sidebarExpand.addEventListener("click",()=>{
+      const expanded=sidebar.classList.toggle("is-expanded");
+      sidebarExpand.setAttribute("aria-expanded",String(expanded));
+      sidebarExpand.setAttribute("aria-label",expanded?"Свернуть меню":"Развернуть меню");
+    });
+  }
+  let sidebarScrollTimer=0;
+  window.addEventListener("scroll",()=>{
+    if(window.innerWidth<=760)return;
+    sidebar.classList.add("is-scrolling");
+    sidebar.classList.remove("is-expanded");
+    if(sidebarExpand){sidebarExpand.setAttribute("aria-expanded","false");sidebarExpand.setAttribute("aria-label","Развернуть меню");}
+    window.clearTimeout(sidebarScrollTimer);
+    sidebarScrollTimer=window.setTimeout(()=>sidebar.classList.remove("is-scrolling"),700);
+  },{passive:true});
+
   menuToggle.addEventListener("click",()=>{const opened=sidebar.classList.toggle("open");menuToggle.setAttribute("aria-expanded",String(opened));});
   nav.addEventListener("click",e=>{const link=e.target.closest("a");if(link){sidebar.classList.remove("open");menuToggle.setAttribute("aria-expanded","false");nav.querySelectorAll("a").forEach(a=>a.classList.toggle("active",a===link));}});
   if ("IntersectionObserver" in window) {
