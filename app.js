@@ -150,6 +150,13 @@
     thumbs.forEach((item,i) => item.classList.toggle("active",i===index));
     thumbs[index].scrollIntoView({block:"nearest",inline:"nearest",behavior:"smooth"});
   });
+  modalContent.addEventListener("keydown", event => {
+    if ((event.key === "Enter" || event.key === " ") && event.target.matches("[data-gallery-main]")) {
+      event.preventDefault();
+      const gallery = event.target.closest("[data-gallery]");
+      if (gallery) openPhotoViewer(gallery);
+    }
+  });
   tabs.addEventListener("click", e => { const b=e.target.closest("button[data-filter]"); if(!b)return; activeFilter=b.dataset.filter; maxPrice=Infinity; document.getElementById("quickPrice").value="all"; tabs.querySelectorAll("button").forEach(x=>x.classList.toggle("active",x===b)); render(); });
   sort.addEventListener("change",render);
   grid.addEventListener("click",e=>{const f=e.target.closest("[data-fav]");if(f){e.stopPropagation();f.textContent=f.textContent==="♡"?"♥":"♡";f.classList.toggle("selected");return;}const c=e.target.closest("[data-id]");if(c)openProperty(c.dataset.id);});
