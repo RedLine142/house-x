@@ -55,7 +55,7 @@
     const p = properties.find(item => item.id === Number(id)); if (!p) return;
     modalReturnFocus = document.activeElement;
     const galleryMarkup = p.images && p.images.length
-      ? '<div class="property-gallery" data-gallery data-active="0"><div class="gallery-main"><img data-gallery-main src="' + p.images[0] + '" alt="' + p.title + ' — фото 1"><button class="gallery-arrow gallery-prev" type="button" data-gallery-prev aria-label="Предыдущее фото">‹</button><button class="gallery-arrow gallery-next" type="button" data-gallery-next aria-label="Следующее фото">›</button><span class="gallery-count" data-gallery-count>01 / ' + String(p.images.length).padStart(2,"0") + '</span></div><div class="gallery-thumbs">' + p.images.map((url,index) => '<button type="button" class="gallery-thumb' + (index===0?' active':'') + '" data-gallery-thumb="' + index + '" aria-label="Показать фото ' + (index+1) + '"><img src="' + url + '" alt="" loading="lazy"></button>').join("") + '</div>' + (p.images.findIndex(url => /plan\.(png|jpe?g|webp)$/i.test(url)) >= 0 ? '<div class="gallery-plan-row"><button class="gallery-plan-button" type="button" data-gallery-plan="' + p.images.findIndex(url => /plan\.(png|jpe?g|webp)$/i.test(url)) + '">ПЛАНИРОВКА</button></div>' : '') + '</div>'
+      ? '<div class="property-gallery" data-gallery data-active="0"><div class="gallery-main"><img data-gallery-main src="' + p.images[0] + '" alt="' + p.title + ' — фото 1" role="button" tabindex="0" aria-label="Открыть фотографию на весь экран"><button class="gallery-arrow gallery-prev" type="button" data-gallery-prev aria-label="Предыдущее фото">‹</button><button class="gallery-arrow gallery-next" type="button" data-gallery-next aria-label="Следующее фото">›</button><span class="gallery-count" data-gallery-count>01 / ' + String(p.images.length).padStart(2,"0") + '</span></div><div class="gallery-thumbs">' + p.images.map((url,index) => '<button type="button" class="gallery-thumb' + (index===0?' active':'') + '" data-gallery-thumb="' + index + '" aria-label="Показать фото ' + (index+1) + '"><img src="' + url + '" alt="" loading="lazy"></button>').join("") + '</div>' + (p.images.findIndex(url => /plan\.(png|jpe?g|webp)$/i.test(url)) >= 0 ? '<div class="gallery-plan-row"><button class="gallery-plan-button" type="button" data-gallery-plan="' + p.images.findIndex(url => /plan\.(png|jpe?g|webp)$/i.test(url)) + '">ПЛАНИРОВКА</button></div>' : '') + '</div>'
       : (p.image ? '<div class="modal-hero"><img src="' + p.image + '" alt="' + p.title + '"></div>' : '<div class="modal-hero" style="min-height:180px;display:grid;place-items:center;background:linear-gradient(135deg,#18232b,#0b0e12);color:#38d9ff;letter-spacing:.18em;font-weight:800">ХАУС-X</div>');
     modalContent.innerHTML = galleryMarkup + '<div class="modal-body"><div class="section-kicker"><span></span> ' + p.type.toUpperCase() + ' · ' + p.status.toUpperCase() + '</div><h2 id="modalTitle">' + p.title + '</h2><div class="property-location">' + p.location + '</div><div class="modal-facts"><span>' + area(p.area) + '</span>' + (p.rooms ? '<span>' + p.rooms + ' комнаты</span>' : '') + '<span>' + p.floor + '</span></div><div class="modal-price">' + money(p.price) + '</div>' + '<p>' + p.description + '</p><p><b>Особенности:</b> ' + p.features.join(" · ") + '</p>' + (p.details ? '<div class="property-details"><h3>Характеристики и описание</h3><ul>' + p.details.map(x => '<li>' + x + '</li>').join('') + '</ul></div>' : '') + '<div class="modal-actions"><a class="btn" href="#contacts" data-close>Запросить информацию <svg class="ui-arrow" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M3.5 12.5 12.5 3.5 M6 3.5h6.5V10" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="phone-action" href="tel:+79049627770">+7 (904) 962-77-70</a></div></div>';
     modal.classList.add("open"); modal.setAttribute("aria-hidden","false"); document.body.classList.add("no-scroll");
@@ -63,12 +63,74 @@
     const closeButton = modal.querySelector(".modal-close"); if (closeButton) closeButton.focus({preventScroll:true});
   }
   function closeModal() { modal.classList.remove("open"); modal.setAttribute("aria-hidden","true"); document.body.classList.remove("no-scroll"); if (modalReturnFocus && typeof modalReturnFocus.focus === "function") modalReturnFocus.focus({preventScroll:true}); modalReturnFocus = null; }
+
+  // Full-screen property photo viewer, synchronized with the existing gallery.
+  const photoViewer = document.createElement("div");
+  photoViewer.className = "photo-viewer";
+  photoViewer.setAttribute("aria-hidden", "true");
+  photoViewer.innerHTML = '<button class="photo-viewer-close" type="button" aria-label="Закрыть просмотр">×</button><button class="photo-viewer-arrow photo-viewer-prev" type="button" aria-label="Предыдущее фото">‹</button><img class="photo-viewer-image" alt=""><button class="photo-viewer-arrow photo-viewer-next" type="button" aria-label="Следующее фото">›</button><span class="photo-viewer-count" aria-live="polite"></span>';
+  document.body.appendChild(photoViewer);
+  let photoViewerGallery = null, photoViewerTouchX = 0;
+  function syncPhotoViewer() {
+    if (!photoViewerGallery) return;
+    const thumbs = Array.from(photoViewerGallery.querySelectorAll("[data-gallery-thumb]"));
+    const index = Number(photoViewerGallery.dataset.active || 0);
+    const source = thumbs[index] && thumbs[index].querySelector("img");
+    const main = photoViewerGallery.querySelector("[data-gallery-main]");
+    const image = photoViewer.querySelector(".photo-viewer-image");
+    image.src = source ? source.src : main.src;
+    image.alt = "Фотография объекта — " + (index + 1);
+    photoViewer.querySelector(".photo-viewer-count").textContent = String(index + 1).padStart(2,"0") + " / " + String(thumbs.length).padStart(2,"0");
+    photoViewer.querySelectorAll(".photo-viewer-arrow").forEach(button => button.hidden = thumbs.length < 2);
+  }
+  function openPhotoViewer(gallery) {
+    photoViewerGallery = gallery;
+    syncPhotoViewer();
+    photoViewer.classList.add("is-open");
+    photoViewer.setAttribute("aria-hidden","false");
+    document.body.classList.add("photo-viewer-open");
+    photoViewer.querySelector(".photo-viewer-close").focus({preventScroll:true});
+  }
+  function closePhotoViewer() {
+    if (!photoViewer.classList.contains("is-open")) return;
+    photoViewer.classList.remove("is-open");
+    photoViewer.setAttribute("aria-hidden","true");
+    document.body.classList.remove("photo-viewer-open");
+    const main = photoViewerGallery && photoViewerGallery.querySelector("[data-gallery-main]");
+    if (main) main.focus({preventScroll:true});
+    photoViewerGallery = null;
+  }
+  function stepPhotoViewer(direction) {
+    if (!photoViewerGallery) return;
+    const thumbs = Array.from(photoViewerGallery.querySelectorAll("[data-gallery-thumb]"));
+    if (thumbs.length < 2) return;
+    const current = Number(photoViewerGallery.dataset.active || 0);
+    thumbs[(current + direction + thumbs.length) % thumbs.length].click();
+    syncPhotoViewer();
+  }
+  photoViewer.addEventListener("click", event => {
+    if (event.target.closest(".photo-viewer-close")) closePhotoViewer();
+    else if (event.target.closest(".photo-viewer-prev")) stepPhotoViewer(-1);
+    else if (event.target.closest(".photo-viewer-next")) stepPhotoViewer(1);
+    else if (event.target === photoViewer) closePhotoViewer();
+  });
+  photoViewer.addEventListener("keydown", event => {
+    if (event.key === "Escape") { event.preventDefault(); event.stopPropagation(); closePhotoViewer(); }
+    else if (event.key === "ArrowLeft") { event.preventDefault(); stepPhotoViewer(-1); }
+    else if (event.key === "ArrowRight") { event.preventDefault(); stepPhotoViewer(1); }
+  });
+  photoViewer.addEventListener("touchstart", event => { photoViewerTouchX = event.changedTouches[0].clientX; }, {passive:true});
+  photoViewer.addEventListener("touchend", event => {
+    const delta = event.changedTouches[0].clientX - photoViewerTouchX;
+    if (Math.abs(delta) > 45) stepPhotoViewer(delta < 0 ? 1 : -1);
+  }, {passive:true});
   modalContent.addEventListener("click", e => {
     const gallery = e.target.closest("[data-gallery]");
     if (!gallery) return;
     const thumbs = Array.from(gallery.querySelectorAll("[data-gallery-thumb]"));
     if (!thumbs.length) return;
     let index = Number(gallery.dataset.active || 0);
+    if (e.target.closest("[data-gallery-main]")) { openPhotoViewer(gallery); return; }
     const thumb = e.target.closest("[data-gallery-thumb]");
     if (thumb) index = Number(thumb.dataset.galleryThumb);
     else if (e.target.closest("[data-gallery-plan]")) index = Number(e.target.closest("[data-gallery-plan]").dataset.galleryPlan);
@@ -87,6 +149,13 @@
     gallery.querySelector("[data-gallery-count]").textContent = String(index + 1).padStart(2,"0") + " / " + String(thumbs.length).padStart(2,"0");
     thumbs.forEach((item,i) => item.classList.toggle("active",i===index));
     thumbs[index].scrollIntoView({block:"nearest",inline:"nearest",behavior:"smooth"});
+  });
+  modalContent.addEventListener("keydown", event => {
+    if ((event.key === "Enter" || event.key === " ") && event.target.matches("[data-gallery-main]")) {
+      event.preventDefault();
+      const gallery = event.target.closest("[data-gallery]");
+      if (gallery) openPhotoViewer(gallery);
+    }
   });
   tabs.addEventListener("click", e => { const b=e.target.closest("button[data-filter]"); if(!b)return; activeFilter=b.dataset.filter; maxPrice=Infinity; document.getElementById("quickPrice").value="all"; tabs.querySelectorAll("button").forEach(x=>x.classList.toggle("active",x===b)); render(); });
   sort.addEventListener("change",render);

@@ -1586,3 +1586,27 @@ main.bento-home{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:
 @media(prefers-reduced-motion:reduce){
   #propertyModal .modal-panel{scroll-behavior:auto}
 }
+
+
+/* Full-screen property photo viewer */
+.photo-viewer{position:fixed;inset:0;z-index:120;display:none;align-items:center;justify-content:center;background:rgba(2,5,8,.97);padding:64px 76px 54px;touch-action:pan-y}
+.photo-viewer.is-open{display:flex;animation:photoViewerIn .22s ease both}
+.photo-viewer-image{display:block;max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;user-select:none;-webkit-user-drag:none}
+.photo-viewer-close,.photo-viewer-arrow{position:absolute;z-index:2;display:grid;place-items:center;border:1px solid rgba(255,255,255,.35);background:rgba(8,14,18,.48);color:#fff;cursor:pointer;backdrop-filter:blur(8px);transition:background .2s,border-color .2s,color .2s}
+.photo-viewer-close{top:20px;right:22px;width:44px;height:44px;font:300 32px/1 Manrope,sans-serif}
+.photo-viewer-arrow{top:50%;transform:translateY(-50%);width:54px;height:72px;font:300 48px/1 Manrope,sans-serif}
+.photo-viewer-prev{left:18px}.photo-viewer-next{right:18px}
+.photo-viewer-close:hover,.photo-viewer-arrow:hover{background:#c6ff3d;border-color:#c6ff3d;color:#10160c}
+.photo-viewer-count{position:absolute;bottom:18px;left:50%;transform:translateX(-50%);padding:8px 12px;background:rgba(8,14,18,.62);color:#fff;font:700 11px/1 Manrope,sans-serif;letter-spacing:.14em}
+.photo-viewer-arrow[hidden]{display:none}
+.photo-viewer-open{overflow:hidden}
+[data-gallery-main]{cursor:zoom-in}
+@keyframes photoViewerIn{from{opacity:0}to{opacity:1}}
+@media(max-width:760px){
+ .photo-viewer{padding:54px 12px 58px}
+ .photo-viewer-arrow{width:38px;height:54px;font-size:36px;background:rgba(8,14,18,.28);border-color:rgba(255,255,255,.2)}
+ .photo-viewer-prev{left:5px}.photo-viewer-next{right:5px}
+ .photo-viewer-close{top:max(12px,env(safe-area-inset-top));right:12px;width:40px;height:40px}
+ .photo-viewer-count{bottom:max(14px,env(safe-area-inset-bottom))}
+}
+@media(prefers-reduced-motion:reduce){.photo-viewer.is-open{animation:none}}
