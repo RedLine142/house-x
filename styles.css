@@ -1626,3 +1626,7 @@ main.bento-home{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:
 .journal-control:hover:not(:disabled){border-color:var(--raspberry);color:var(--raspberry)}
 .contact-form input:focus,.contact-form select:focus,.contact-form textarea:focus{border-color:var(--raspberry);box-shadow:0 0 0 3px #ff2d5518}
 .footer>a:hover{color:var(--raspberry)}
+
+
+/* Контраст активных иконок боковой навигации на кислотном фоне */
+.sidebar .side-nav a.active .nav-icon{stroke:#10160e!important;color:#10160e!important;opacity:1}
