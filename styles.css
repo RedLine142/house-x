@@ -1610,3 +1610,19 @@ main.bento-home{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:
  .photo-viewer-count{bottom:max(14px,env(safe-area-inset-bottom))}
 }
 @media(prefers-reduced-motion:reduce){.photo-viewer.is-open{animation:none}}
+
+/* HOUSE-X raspberry accent: a third brand color, used sparingly. */
+:root{--raspberry:#ff2d55}
+.sidebar .side-nav a.active{box-shadow:inset 3px 0 var(--raspberry),0 5px 22px #c6ff3d25}
+.sidebar .side-nav a.active .nav-dot{background:var(--raspberry);box-shadow:0 0 10px #ff2d5580}
+.universe-index{color:var(--raspberry)}
+.feature-mark{border-left:2px solid var(--raspberry)}
+.service-number{color:var(--raspberry)}
+.service-tile:hover .service-icon{border-color:#ff2d5570;background:#ff2d5512;color:var(--raspberry)}
+.property-card:hover{border-color:#ff2d5570;box-shadow:0 18px 45px #0005,0 0 0 1px #ff2d5510}
+.property-fav:hover,.property-fav.selected{background:var(--raspberry);border-color:var(--raspberry);color:#fff}
+.filter-tabs button:hover:not(.active){color:var(--raspberry)}
+.journal-count{color:var(--raspberry)}
+.journal-control:hover:not(:disabled){border-color:var(--raspberry);color:var(--raspberry)}
+.contact-form input:focus,.contact-form select:focus,.contact-form textarea:focus{border-color:var(--raspberry);box-shadow:0 0 0 3px #ff2d5518}
+.footer>a:hover{color:var(--raspberry)}
