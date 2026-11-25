@@ -1691,3 +1691,74 @@ main.bento-home{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:
 @media(hover:hover) and (pointer:fine){.property-card:hover,.journal-card:hover{border-color:rgba(112,218,245,.48);box-shadow:inset 0 1px 0 rgba(255,255,255,.15),0 20px 48px rgba(0,0,0,.28),0 0 24px rgba(56,217,255,.055)}.service-tile:hover{border-color:rgba(198,255,61,.42);box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 22px 48px rgba(0,0,0,.28),0 0 24px rgba(198,255,61,.055)}.top-contact:hover,.modal-close:hover,.journal-control:hover{background:rgba(255,255,255,.105);border-color:rgba(198,255,61,.48)}}
 @media(max-width:760px){.sidebar{background:rgba(11,16,22,.94);-webkit-backdrop-filter:blur(22px) saturate(145%);backdrop-filter:blur(22px) saturate(145%)}.quick-panel,.property-card,.service-tile,.about-strip,.contact-panel,.journal-card,.modal-panel{-webkit-backdrop-filter:blur(14px) saturate(135%);backdrop-filter:blur(14px) saturate(135%)}}
 @media(prefers-reduced-transparency:reduce){.sidebar,.topbar,.quick-panel,.property-card,.service-tile,.about-strip,.contact-panel,.journal-card,.modal-panel,.side-help{-webkit-backdrop-filter:none!important;backdrop-filter:none!important}}
+
+
+/* HOUSE-X cinematic photo viewer: shared-element opening, glass controls and mobile-safe layout */
+.photo-viewer{
+  box-sizing:border-box;
+  background:radial-gradient(ellipse at 50% 46%,rgba(25,38,47,.76),rgba(3,7,11,.92) 72%);
+  -webkit-backdrop-filter:blur(24px) saturate(145%);
+  backdrop-filter:blur(24px) saturate(145%);
+  overflow:hidden;
+  isolation:isolate;
+}
+.photo-viewer.is-open{display:flex;animation:photoViewerIn .28s ease both}
+.photo-viewer-image{
+  position:relative;
+  z-index:1;
+  max-width:min(100%,1680px);
+  max-height:100%;
+  border-radius:10px;
+  box-shadow:0 28px 90px rgba(0,0,0,.42),0 0 0 1px rgba(255,255,255,.08);
+  transition:opacity .2s ease;
+}
+.photo-viewer-origin{
+  display:block;
+  max-width:none!important;
+  max-height:none!important;
+  object-fit:cover;
+  box-shadow:0 24px 80px rgba(0,0,0,.45);
+}
+.photo-viewer-close,.photo-viewer-arrow{
+  border:1px solid rgba(220,238,248,.22);
+  background:rgba(14,22,29,.48);
+  -webkit-backdrop-filter:blur(22px) saturate(165%);
+  backdrop-filter:blur(22px) saturate(165%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.13),0 12px 30px rgba(0,0,0,.2);
+}
+.photo-viewer-close{border-radius:16px}
+.photo-viewer-arrow{border-radius:18px}
+.photo-viewer-count{
+  border:1px solid rgba(220,238,248,.18);
+  border-radius:999px;
+  background:rgba(14,22,29,.58);
+  -webkit-backdrop-filter:blur(20px) saturate(155%);
+  backdrop-filter:blur(20px) saturate(155%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 8px 24px rgba(0,0,0,.22);
+  padding:10px 16px;
+}
+.photo-viewer-close:focus-visible,.photo-viewer-arrow:focus-visible{
+  outline:2px solid #c6ff3d;
+  outline-offset:4px;
+}
+.photo-viewer-arrow:active,.photo-viewer-close:active{transform:translateY(-50%) scale(.96)}
+.photo-viewer-close:active{transform:scale(.96)}
+@media(max-width:760px){
+  .photo-viewer{
+    padding:max(58px,calc(env(safe-area-inset-top) + 54px)) 10px max(66px,calc(env(safe-area-inset-bottom) + 58px));
+  }
+  .photo-viewer-image{max-width:100%;max-height:100%;border-radius:7px}
+  .photo-viewer-close{width:44px;height:44px;right:max(12px,env(safe-area-inset-right));}
+  .photo-viewer-arrow{width:44px;height:58px;border-radius:14px}
+  .photo-viewer-prev{left:max(7px,env(safe-area-inset-left))}
+  .photo-viewer-next{right:max(7px,env(safe-area-inset-right))}
+  .photo-viewer-count{bottom:max(16px,env(safe-area-inset-bottom));padding:10px 15px}
+}
+@media(prefers-reduced-motion:reduce){
+  .photo-viewer,.photo-viewer.is-open,.photo-viewer-image,.photo-viewer-origin,
+  .photo-viewer-close,.photo-viewer-arrow{animation:none!important;transition:none!important}
+}
+@media(prefers-reduced-transparency:reduce){
+  .photo-viewer{background:#05090d}
+  .photo-viewer-close,.photo-viewer-arrow,.photo-viewer-count{background:#101820;-webkit-backdrop-filter:none;backdrop-filter:none}
+}

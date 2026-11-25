@@ -68,20 +68,43 @@
   const photoViewer = document.createElement("div");
   photoViewer.className = "photo-viewer";
   photoViewer.setAttribute("aria-hidden", "true");
+  photoViewer.setAttribute("role", "dialog");
+  photoViewer.setAttribute("aria-modal", "true");
+  photoViewer.setAttribute("aria-label", "Просмотр фотографий объекта");
+  photoViewer.setAttribute("tabindex", "-1");
   photoViewer.innerHTML = '<button class="photo-viewer-close" type="button" aria-label="Закрыть просмотр">×</button><button class="photo-viewer-arrow photo-viewer-prev" type="button" aria-label="Предыдущее фото">‹</button><img class="photo-viewer-image" alt=""><button class="photo-viewer-arrow photo-viewer-next" type="button" aria-label="Следующее фото">›</button><span class="photo-viewer-count" aria-live="polite"></span>';
   document.body.appendChild(photoViewer);
-  let photoViewerGallery = null, photoViewerTouchX = 0;
-  function syncPhotoViewer() {
+  let photoViewerGallery = null, photoViewerTouchX = 0, photoViewerTouchY = 0;
+  let photoViewerTransition = null, photoViewerOrigin = null;
+  function syncPhotoViewer(animate = false) {
     if (!photoViewerGallery) return;
     const thumbs = Array.from(photoViewerGallery.querySelectorAll("[data-gallery-thumb]"));
     const index = Number(photoViewerGallery.dataset.active || 0);
     const source = thumbs[index] && thumbs[index].querySelector("img");
     const main = photoViewerGallery.querySelector("[data-gallery-main]");
     const image = photoViewer.querySelector(".photo-viewer-image");
-    image.src = source ? source.src : main.src;
-    image.alt = "Фотография объекта — " + (index + 1);
+    const nextSrc = source ? source.src : main.src;
+    if (image.src !== nextSrc) {
+      image.src = nextSrc;
+      if (animate && !window.matchMedia("(prefers-reduced-motion: reduce)").matches && image.animate) {
+        image.animate([{opacity:.45,transform:"scale(.985)"},{opacity:1,transform:"scale(1)"}],{duration:260,easing:"cubic-bezier(.2,.75,.25,1)"});
+      }
+    }
+    image.alt = main.alt || ("Фотография объекта — " + (index + 1));
     photoViewer.querySelector(".photo-viewer-count").textContent = String(index + 1).padStart(2,"0") + " / " + String(thumbs.length).padStart(2,"0");
     photoViewer.querySelectorAll(".photo-viewer-arrow").forEach(button => button.hidden = thumbs.length < 2);
+  }
+  function clearPhotoViewerTransition() {
+    if (photoViewerTransition) {
+      photoViewerTransition.cancel();
+      photoViewerTransition = null;
+    }
+    if (photoViewerOrigin) {
+      photoViewerOrigin.remove();
+      photoViewerOrigin = null;
+    }
+    const image = photoViewer.querySelector(".photo-viewer-image");
+    if (image) image.style.opacity = "";
   }
   function openPhotoViewer(gallery) {
     photoViewerGallery = gallery;
@@ -89,10 +112,38 @@
     photoViewer.classList.add("is-open");
     photoViewer.setAttribute("aria-hidden","false");
     document.body.classList.add("photo-viewer-open");
-    photoViewer.querySelector(".photo-viewer-close").focus({preventScroll:true});
+    const closeButton = photoViewer.querySelector(".photo-viewer-close");
+    const main = gallery.querySelector("[data-gallery-main]");
+    const image = photoViewer.querySelector(".photo-viewer-image");
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!reducedMotion && main && image.animate) {
+      const from = main.getBoundingClientRect();
+      const to = image.getBoundingClientRect();
+      photoViewerOrigin = main.cloneNode(true);
+      photoViewerOrigin.removeAttribute("role");
+      photoViewerOrigin.removeAttribute("tabindex");
+      photoViewerOrigin.className = "photo-viewer-origin";
+      Object.assign(photoViewerOrigin.style,{position:"fixed",left:from.left+"px",top:from.top+"px",width:from.width+"px",height:from.height+"px",objectFit:"cover",zIndex:"3",pointerEvents:"none",margin:"0",borderRadius:"14px"});
+      photoViewer.appendChild(photoViewerOrigin);
+      image.style.opacity = "0";
+      photoViewerTransition = photoViewerOrigin.animate([
+        {left:from.left+"px",top:from.top+"px",width:from.width+"px",height:from.height+"px",borderRadius:"14px"},
+        {left:to.left+"px",top:to.top+"px",width:to.width+"px",height:to.height+"px",borderRadius:"10px"}
+      ],{duration:520,easing:"cubic-bezier(.22,.8,.2,1)",fill:"forwards"});
+      photoViewerTransition.onfinish = () => {
+        if (photoViewerOrigin) { photoViewerOrigin.remove(); photoViewerOrigin = null; }
+        photoViewerTransition = null;
+        if (photoViewerGallery) {
+          image.style.opacity = "";
+          image.animate([{opacity:0},{opacity:1}],{duration:180,easing:"ease-out"});
+        }
+      };
+    }
+    closeButton.focus({preventScroll:true});
   }
   function closePhotoViewer() {
     if (!photoViewer.classList.contains("is-open")) return;
+    clearPhotoViewerTransition();
     photoViewer.classList.remove("is-open");
     photoViewer.setAttribute("aria-hidden","true");
     document.body.classList.remove("photo-viewer-open");
@@ -106,7 +157,7 @@
     if (thumbs.length < 2) return;
     const current = Number(photoViewerGallery.dataset.active || 0);
     thumbs[(current + direction + thumbs.length) % thumbs.length].click();
-    syncPhotoViewer();
+    syncPhotoViewer(true);
   }
   photoViewer.addEventListener("click", event => {
     if (event.target.closest(".photo-viewer-close")) closePhotoViewer();
@@ -118,11 +169,21 @@
     if (event.key === "Escape") { event.preventDefault(); event.stopPropagation(); closePhotoViewer(); }
     else if (event.key === "ArrowLeft") { event.preventDefault(); stepPhotoViewer(-1); }
     else if (event.key === "ArrowRight") { event.preventDefault(); stepPhotoViewer(1); }
+    else if (event.key === "Tab") {
+      const items = Array.from(photoViewer.querySelectorAll("button:not([hidden])"));
+      const first = items[0], last = items[items.length - 1];
+      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+      else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+    }
   });
-  photoViewer.addEventListener("touchstart", event => { photoViewerTouchX = event.changedTouches[0].clientX; }, {passive:true});
+  photoViewer.addEventListener("touchstart", event => {
+    photoViewerTouchX = event.changedTouches[0].clientX;
+    photoViewerTouchY = event.changedTouches[0].clientY;
+  }, {passive:true});
   photoViewer.addEventListener("touchend", event => {
-    const delta = event.changedTouches[0].clientX - photoViewerTouchX;
-    if (Math.abs(delta) > 45) stepPhotoViewer(delta < 0 ? 1 : -1);
+    const deltaX = event.changedTouches[0].clientX - photoViewerTouchX;
+    const deltaY = event.changedTouches[0].clientY - photoViewerTouchY;
+    if (Math.abs(deltaX) > 48 && Math.abs(deltaX) > Math.abs(deltaY) * 1.25) stepPhotoViewer(deltaX < 0 ? 1 : -1);
   }, {passive:true});
   modalContent.addEventListener("click", e => {
     const gallery = e.target.closest("[data-gallery]");
