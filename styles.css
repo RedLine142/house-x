@@ -1654,3 +1654,20 @@ main.bento-home{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:
 }
 /* Process steps: remove obsolete outer frame */
 .process-steps{border:0!important}
+
+/* Compact desktop sidebar: center the icon itself in the full highlighted row. */
+@media(min-width:761px){
+  .sidebar:not(:hover):not(:focus-within):not(.is-expanded) .side-nav a .nav-label,
+  .sidebar.is-scrolling .side-nav a .nav-label{
+    display:none!important;
+  }
+  .sidebar:not(:hover):not(:focus-within):not(.is-expanded) .side-nav a .nav-icon,
+  .sidebar.is-scrolling .side-nav a .nav-icon{
+    margin-inline:auto!important;
+  }
+  .sidebar:hover:not(.is-scrolling) .side-nav a .nav-label,
+  .sidebar:focus-within:not(.is-scrolling) .side-nav a .nav-label,
+  .sidebar.is-expanded:not(.is-scrolling) .side-nav a .nav-label{
+    display:inline-block!important;
+  }
+}
