@@ -1652,3 +1652,5 @@ main.bento-home{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:
     padding:0 5px 34px!important;
   }
 }
+/* Process steps: remove obsolete outer frame */
+.process-steps{border:0!important}
