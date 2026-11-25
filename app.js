@@ -141,15 +141,41 @@
     }
     closeButton.focus({preventScroll:true});
   }
-  function closePhotoViewer() {
-    if (!photoViewer.classList.contains("is-open")) return;
-    clearPhotoViewerTransition();
+  function finishPhotoViewerClose(main) {
+    if (photoViewerOrigin) { photoViewerOrigin.remove(); photoViewerOrigin = null; }
+    photoViewerTransition = null;
+    photoViewer.dataset.closing = "false";
+    const image = photoViewer.querySelector(".photo-viewer-image");
+    image.style.opacity = "";
     photoViewer.classList.remove("is-open");
     photoViewer.setAttribute("aria-hidden","true");
     document.body.classList.remove("photo-viewer-open");
-    const main = photoViewerGallery && photoViewerGallery.querySelector("[data-gallery-main]");
     if (main) main.focus({preventScroll:true});
     photoViewerGallery = null;
+  }
+  function closePhotoViewer() {
+    if (!photoViewer.classList.contains("is-open") || photoViewer.dataset.closing === "true") return;
+    const main = photoViewerGallery && photoViewerGallery.querySelector("[data-gallery-main]");
+    const image = photoViewer.querySelector(".photo-viewer-image");
+    clearPhotoViewerTransition();
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!reducedMotion && main && image.animate) {
+      const from = image.getBoundingClientRect();
+      const to = main.getBoundingClientRect();
+      photoViewerOrigin = image.cloneNode(true);
+      photoViewerOrigin.className = "photo-viewer-origin";
+      Object.assign(photoViewerOrigin.style,{position:"fixed",left:from.left+"px",top:from.top+"px",width:from.width+"px",height:from.height+"px",objectFit:"contain",zIndex:"3",pointerEvents:"none",margin:"0",borderRadius:"10px"});
+      photoViewer.appendChild(photoViewerOrigin);
+      image.style.opacity = "0";
+      photoViewer.dataset.closing = "true";
+      photoViewerTransition = photoViewerOrigin.animate([
+        {left:from.left+"px",top:from.top+"px",width:from.width+"px",height:from.height+"px",borderRadius:"10px"},
+        {left:to.left+"px",top:to.top+"px",width:to.width+"px",height:to.height+"px",borderRadius:"14px"}
+      ],{duration:440,easing:"cubic-bezier(.22,.8,.2,1)",fill:"forwards"});
+      photoViewerTransition.onfinish = () => finishPhotoViewerClose(main);
+    } else {
+      finishPhotoViewerClose(main);
+    }
   }
   function stepPhotoViewer(direction) {
     if (!photoViewerGallery) return;
